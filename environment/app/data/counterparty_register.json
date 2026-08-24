@@ -1,0 +1,2382 @@
+[
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000001",
+    "party_id": "CP-0001"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000002",
+    "party_id": "CP-0002"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000003",
+    "party_id": "CP-0003"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0193",
+    "in_scope": true,
+    "lei": "LEI0000000000000004",
+    "party_id": "CP-0004"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000005",
+    "party_id": "CP-0005"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000006",
+    "party_id": "CP-0006"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0319",
+    "in_scope": true,
+    "lei": "LEI0000000000000007",
+    "party_id": "CP-0007"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000008",
+    "party_id": "CP-0008"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000009",
+    "party_id": "CP-0009"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000010",
+    "party_id": "CP-0010"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000011",
+    "party_id": "CP-0011"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000012",
+    "party_id": "CP-0012"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000013",
+    "party_id": "CP-0013"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000014",
+    "party_id": "CP-0014"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000015",
+    "party_id": "CP-0015"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0323",
+    "in_scope": true,
+    "lei": "LEI0000000000000016",
+    "party_id": "CP-0016"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0081",
+    "in_scope": true,
+    "lei": "LEI0000000000000017",
+    "party_id": "CP-0017"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000018",
+    "party_id": "CP-0018"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000019",
+    "party_id": "CP-0019"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000020",
+    "party_id": "CP-0020"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000021",
+    "party_id": "CP-0021"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000022",
+    "party_id": "CP-0022"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000023",
+    "party_id": "CP-0023"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000024",
+    "party_id": "CP-0024"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000025",
+    "party_id": "CP-0025"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000026",
+    "party_id": "CP-0026"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000027",
+    "party_id": "CP-0027"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0066",
+    "in_scope": true,
+    "lei": "LEI0000000000000028",
+    "party_id": "CP-0028"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000029",
+    "party_id": "CP-0029"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000030",
+    "party_id": "CP-0030"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000031",
+    "party_id": "CP-0031"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0256",
+    "in_scope": true,
+    "lei": "LEI0000000000000032",
+    "party_id": "CP-0032"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0270",
+    "in_scope": true,
+    "lei": "LEI0000000000000033",
+    "party_id": "CP-0033"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0092",
+    "in_scope": true,
+    "lei": "LEI0000000000000034",
+    "party_id": "CP-0034"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000035",
+    "party_id": "CP-0035"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000036",
+    "party_id": "CP-0036"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000037",
+    "party_id": "CP-0037"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000038",
+    "party_id": "CP-0038"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000039",
+    "party_id": "CP-0039"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000040",
+    "party_id": "CP-0040"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000041",
+    "party_id": "CP-0041"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000042",
+    "party_id": "CP-0042"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000043",
+    "party_id": "CP-0043"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0261",
+    "in_scope": true,
+    "lei": "LEI0000000000000044",
+    "party_id": "CP-0044"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0324",
+    "in_scope": true,
+    "lei": "LEI0000000000000045",
+    "party_id": "CP-0045"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000046",
+    "party_id": "CP-0046"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000047",
+    "party_id": "CP-0047"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000048",
+    "party_id": "CP-0048"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000049",
+    "party_id": "CP-0049"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000050",
+    "party_id": "CP-0050"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000051",
+    "party_id": "CP-0051"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000052",
+    "party_id": "CP-0052"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000053",
+    "party_id": "CP-0053"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000054",
+    "party_id": "CP-0054"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000055",
+    "party_id": "CP-0055"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000056",
+    "party_id": "CP-0056"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000057",
+    "party_id": "CP-0057"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000058",
+    "party_id": "CP-0058"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000059",
+    "party_id": "CP-0059"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000060",
+    "party_id": "CP-0060"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000061",
+    "party_id": "CP-0061"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000062",
+    "party_id": "CP-0062"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000063",
+    "party_id": "CP-0063"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000064",
+    "party_id": "CP-0064"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000065",
+    "party_id": "CP-0065"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000066",
+    "party_id": "CP-0066"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000067",
+    "party_id": "CP-0067"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000068",
+    "party_id": "CP-0068"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0326",
+    "in_scope": true,
+    "lei": "LEI0000000000000069",
+    "party_id": "CP-0069"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0178",
+    "in_scope": true,
+    "lei": "LEI0000000000000070",
+    "party_id": "CP-0070"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000071",
+    "party_id": "CP-0071"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000072",
+    "party_id": "CP-0072"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000073",
+    "party_id": "CP-0073"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000074",
+    "party_id": "CP-0074"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000075",
+    "party_id": "CP-0075"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000076",
+    "party_id": "CP-0076"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0092",
+    "in_scope": false,
+    "lei": "LEI0000000000000077",
+    "party_id": "CP-0077"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000078",
+    "party_id": "CP-0078"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0180",
+    "in_scope": false,
+    "lei": "LEI0000000000000079",
+    "party_id": "CP-0079"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000080",
+    "party_id": "CP-0080"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000081",
+    "party_id": "CP-0081"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000082",
+    "party_id": "CP-0082"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0006",
+    "in_scope": false,
+    "lei": "LEI0000000000000083",
+    "party_id": "CP-0083"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000084",
+    "party_id": "CP-0084"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000085",
+    "party_id": "CP-0085"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000086",
+    "party_id": "CP-0086"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000087",
+    "party_id": "CP-0087"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000088",
+    "party_id": "CP-0088"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000089",
+    "party_id": "CP-0089"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000090",
+    "party_id": "CP-0090"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000091",
+    "party_id": "CP-0091"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000092",
+    "party_id": "CP-0092"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000093",
+    "party_id": "CP-0093"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000094",
+    "party_id": "CP-0094"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000095",
+    "party_id": "CP-0095"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000096",
+    "party_id": "CP-0096"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000097",
+    "party_id": "CP-0097"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000098",
+    "party_id": "CP-0098"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000099",
+    "party_id": "CP-0099"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000100",
+    "party_id": "CP-0100"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000101",
+    "party_id": "CP-0101"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000102",
+    "party_id": "CP-0102"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000103",
+    "party_id": "CP-0103"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000104",
+    "party_id": "CP-0104"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0321",
+    "in_scope": true,
+    "lei": "LEI0000000000000105",
+    "party_id": "CP-0105"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0321",
+    "in_scope": false,
+    "lei": "LEI0000000000000106",
+    "party_id": "CP-0106"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000107",
+    "party_id": "CP-0107"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0216",
+    "in_scope": false,
+    "lei": "LEI0000000000000108",
+    "party_id": "CP-0108"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000109",
+    "party_id": "CP-0109"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000110",
+    "party_id": "CP-0110"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000111",
+    "party_id": "CP-0111"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000112",
+    "party_id": "CP-0112"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000113",
+    "party_id": "CP-0113"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000114",
+    "party_id": "CP-0114"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000115",
+    "party_id": "CP-0115"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0053",
+    "in_scope": true,
+    "lei": "LEI0000000000000116",
+    "party_id": "CP-0116"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000117",
+    "party_id": "CP-0117"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000118",
+    "party_id": "CP-0118"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000119",
+    "party_id": "CP-0119"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000120",
+    "party_id": "CP-0120"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000121",
+    "party_id": "CP-0121"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000122",
+    "party_id": "CP-0122"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0119",
+    "in_scope": true,
+    "lei": "LEI0000000000000123",
+    "party_id": "CP-0123"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0260",
+    "in_scope": true,
+    "lei": "LEI0000000000000124",
+    "party_id": "CP-0124"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000125",
+    "party_id": "CP-0125"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000126",
+    "party_id": "CP-0126"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000127",
+    "party_id": "CP-0127"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000128",
+    "party_id": "CP-0128"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000129",
+    "party_id": "CP-0129"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000130",
+    "party_id": "CP-0130"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0185",
+    "in_scope": false,
+    "lei": "LEI0000000000000131",
+    "party_id": "CP-0131"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000132",
+    "party_id": "CP-0132"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000133",
+    "party_id": "CP-0133"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000134",
+    "party_id": "CP-0134"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000135",
+    "party_id": "CP-0135"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000136",
+    "party_id": "CP-0136"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000137",
+    "party_id": "CP-0137"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000138",
+    "party_id": "CP-0138"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000139",
+    "party_id": "CP-0139"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000140",
+    "party_id": "CP-0140"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000141",
+    "party_id": "CP-0141"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000142",
+    "party_id": "CP-0142"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000143",
+    "party_id": "CP-0143"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000144",
+    "party_id": "CP-0144"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0231",
+    "in_scope": true,
+    "lei": "LEI0000000000000145",
+    "party_id": "CP-0145"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000146",
+    "party_id": "CP-0146"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000147",
+    "party_id": "CP-0147"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000148",
+    "party_id": "CP-0148"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000149",
+    "party_id": "CP-0149"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000150",
+    "party_id": "CP-0150"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000151",
+    "party_id": "CP-0151"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0318",
+    "in_scope": true,
+    "lei": "LEI0000000000000152",
+    "party_id": "CP-0152"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000153",
+    "party_id": "CP-0153"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000154",
+    "party_id": "CP-0154"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000155",
+    "party_id": "CP-0155"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000156",
+    "party_id": "CP-0156"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000157",
+    "party_id": "CP-0157"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0116",
+    "in_scope": true,
+    "lei": "LEI0000000000000158",
+    "party_id": "CP-0158"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000159",
+    "party_id": "CP-0159"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0255",
+    "in_scope": true,
+    "lei": "LEI0000000000000160",
+    "party_id": "CP-0160"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000161",
+    "party_id": "CP-0161"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000162",
+    "party_id": "CP-0162"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000163",
+    "party_id": "CP-0163"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000164",
+    "party_id": "CP-0164"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000165",
+    "party_id": "CP-0165"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000166",
+    "party_id": "CP-0166"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0252",
+    "in_scope": true,
+    "lei": "LEI0000000000000167",
+    "party_id": "CP-0167"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000168",
+    "party_id": "CP-0168"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000169",
+    "party_id": "CP-0169"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000170",
+    "party_id": "CP-0170"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000171",
+    "party_id": "CP-0171"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000172",
+    "party_id": "CP-0172"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000173",
+    "party_id": "CP-0173"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000174",
+    "party_id": "CP-0174"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0227",
+    "in_scope": true,
+    "lei": "LEI0000000000000175",
+    "party_id": "CP-0175"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000176",
+    "party_id": "CP-0176"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000177",
+    "party_id": "CP-0177"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000178",
+    "party_id": "CP-0178"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000179",
+    "party_id": "CP-0179"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000180",
+    "party_id": "CP-0180"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000181",
+    "party_id": "CP-0181"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000182",
+    "party_id": "CP-0182"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000183",
+    "party_id": "CP-0183"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000184",
+    "party_id": "CP-0184"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0202",
+    "in_scope": true,
+    "lei": "LEI0000000000000185",
+    "party_id": "CP-0185"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000186",
+    "party_id": "CP-0186"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000187",
+    "party_id": "CP-0187"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000188",
+    "party_id": "CP-0188"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000189",
+    "party_id": "CP-0189"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000190",
+    "party_id": "CP-0190"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000191",
+    "party_id": "CP-0191"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000192",
+    "party_id": "CP-0192"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000193",
+    "party_id": "CP-0193"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000194",
+    "party_id": "CP-0194"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000195",
+    "party_id": "CP-0195"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000196",
+    "party_id": "CP-0196"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0131",
+    "in_scope": false,
+    "lei": "LEI0000000000000197",
+    "party_id": "CP-0197"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000198",
+    "party_id": "CP-0198"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0136",
+    "in_scope": true,
+    "lei": "LEI0000000000000199",
+    "party_id": "CP-0199"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000200",
+    "party_id": "CP-0200"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000201",
+    "party_id": "CP-0201"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000202",
+    "party_id": "CP-0202"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000203",
+    "party_id": "CP-0203"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000204",
+    "party_id": "CP-0204"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000205",
+    "party_id": "CP-0205"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000206",
+    "party_id": "CP-0206"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000207",
+    "party_id": "CP-0207"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000208",
+    "party_id": "CP-0208"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000209",
+    "party_id": "CP-0209"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000210",
+    "party_id": "CP-0210"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000211",
+    "party_id": "CP-0211"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0169",
+    "in_scope": true,
+    "lei": "LEI0000000000000212",
+    "party_id": "CP-0212"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000213",
+    "party_id": "CP-0213"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000214",
+    "party_id": "CP-0214"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000215",
+    "party_id": "CP-0215"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000216",
+    "party_id": "CP-0216"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000217",
+    "party_id": "CP-0217"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000218",
+    "party_id": "CP-0218"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000219",
+    "party_id": "CP-0219"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000220",
+    "party_id": "CP-0220"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000221",
+    "party_id": "CP-0221"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000222",
+    "party_id": "CP-0222"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000223",
+    "party_id": "CP-0223"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000224",
+    "party_id": "CP-0224"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0277",
+    "in_scope": false,
+    "lei": "LEI0000000000000225",
+    "party_id": "CP-0225"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000226",
+    "party_id": "CP-0226"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000227",
+    "party_id": "CP-0227"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000228",
+    "party_id": "CP-0228"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0172",
+    "in_scope": true,
+    "lei": "LEI0000000000000229",
+    "party_id": "CP-0229"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000230",
+    "party_id": "CP-0230"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000231",
+    "party_id": "CP-0231"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000232",
+    "party_id": "CP-0232"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000233",
+    "party_id": "CP-0233"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000234",
+    "party_id": "CP-0234"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000235",
+    "party_id": "CP-0235"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000236",
+    "party_id": "CP-0236"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000237",
+    "party_id": "CP-0237"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000238",
+    "party_id": "CP-0238"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0328",
+    "in_scope": true,
+    "lei": "LEI0000000000000239",
+    "party_id": "CP-0239"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0207",
+    "in_scope": true,
+    "lei": "LEI0000000000000240",
+    "party_id": "CP-0240"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000241",
+    "party_id": "CP-0241"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000242",
+    "party_id": "CP-0242"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000243",
+    "party_id": "CP-0243"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000244",
+    "party_id": "CP-0244"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000245",
+    "party_id": "CP-0245"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000246",
+    "party_id": "CP-0246"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000247",
+    "party_id": "CP-0247"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000248",
+    "party_id": "CP-0248"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000249",
+    "party_id": "CP-0249"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000250",
+    "party_id": "CP-0250"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000251",
+    "party_id": "CP-0251"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000252",
+    "party_id": "CP-0252"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000253",
+    "party_id": "CP-0253"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000254",
+    "party_id": "CP-0254"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000255",
+    "party_id": "CP-0255"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0331",
+    "in_scope": false,
+    "lei": "LEI0000000000000256",
+    "party_id": "CP-0256"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0180",
+    "in_scope": false,
+    "lei": "LEI0000000000000257",
+    "party_id": "CP-0257"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000258",
+    "party_id": "CP-0258"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000259",
+    "party_id": "CP-0259"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000260",
+    "party_id": "CP-0260"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000261",
+    "party_id": "CP-0261"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0127",
+    "in_scope": true,
+    "lei": "LEI0000000000000262",
+    "party_id": "CP-0262"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000263",
+    "party_id": "CP-0263"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000264",
+    "party_id": "CP-0264"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000265",
+    "party_id": "CP-0265"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0299",
+    "in_scope": true,
+    "lei": "LEI0000000000000266",
+    "party_id": "CP-0266"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0051",
+    "in_scope": true,
+    "lei": "LEI0000000000000267",
+    "party_id": "CP-0267"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000268",
+    "party_id": "CP-0268"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000269",
+    "party_id": "CP-0269"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000270",
+    "party_id": "CP-0270"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000271",
+    "party_id": "CP-0271"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000272",
+    "party_id": "CP-0272"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000273",
+    "party_id": "CP-0273"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000274",
+    "party_id": "CP-0274"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000275",
+    "party_id": "CP-0275"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000276",
+    "party_id": "CP-0276"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000277",
+    "party_id": "CP-0277"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000278",
+    "party_id": "CP-0278"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000279",
+    "party_id": "CP-0279"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0187",
+    "in_scope": false,
+    "lei": "LEI0000000000000280",
+    "party_id": "CP-0280"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000281",
+    "party_id": "CP-0281"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000282",
+    "party_id": "CP-0282"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0339",
+    "in_scope": true,
+    "lei": "LEI0000000000000283",
+    "party_id": "CP-0283"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000284",
+    "party_id": "CP-0284"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000285",
+    "party_id": "CP-0285"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000286",
+    "party_id": "CP-0286"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0215",
+    "in_scope": true,
+    "lei": "LEI0000000000000287",
+    "party_id": "CP-0287"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000288",
+    "party_id": "CP-0288"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000289",
+    "party_id": "CP-0289"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000290",
+    "party_id": "CP-0290"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0312",
+    "in_scope": false,
+    "lei": "LEI0000000000000291",
+    "party_id": "CP-0291"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000292",
+    "party_id": "CP-0292"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0008",
+    "in_scope": false,
+    "lei": "LEI0000000000000293",
+    "party_id": "CP-0293"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000294",
+    "party_id": "CP-0294"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000295",
+    "party_id": "CP-0295"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000296",
+    "party_id": "CP-0296"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000297",
+    "party_id": "CP-0297"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0053",
+    "in_scope": true,
+    "lei": "LEI0000000000000298",
+    "party_id": "CP-0298"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000299",
+    "party_id": "CP-0299"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0035",
+    "in_scope": true,
+    "lei": "LEI0000000000000300",
+    "party_id": "CP-0300"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000301",
+    "party_id": "CP-0301"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000302",
+    "party_id": "CP-0302"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000303",
+    "party_id": "CP-0303"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000304",
+    "party_id": "CP-0304"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0122",
+    "in_scope": true,
+    "lei": "LEI0000000000000305",
+    "party_id": "CP-0305"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000306",
+    "party_id": "CP-0306"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000307",
+    "party_id": "CP-0307"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000308",
+    "party_id": "CP-0308"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000309",
+    "party_id": "CP-0309"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000310",
+    "party_id": "CP-0310"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000311",
+    "party_id": "CP-0311"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000312",
+    "party_id": "CP-0312"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0226",
+    "in_scope": true,
+    "lei": "LEI0000000000000313",
+    "party_id": "CP-0313"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000314",
+    "party_id": "CP-0314"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000315",
+    "party_id": "CP-0315"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000316",
+    "party_id": "CP-0316"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000317",
+    "party_id": "CP-0317"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000318",
+    "party_id": "CP-0318"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000319",
+    "party_id": "CP-0319"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000320",
+    "party_id": "CP-0320"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000321",
+    "party_id": "CP-0321"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000322",
+    "party_id": "CP-0322"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000323",
+    "party_id": "CP-0323"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000324",
+    "party_id": "CP-0324"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000325",
+    "party_id": "CP-0325"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000326",
+    "party_id": "CP-0326"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000327",
+    "party_id": "CP-0327"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0283",
+    "in_scope": false,
+    "lei": "LEI0000000000000328",
+    "party_id": "CP-0328"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "CP-0222",
+    "in_scope": true,
+    "lei": "LEI0000000000000329",
+    "party_id": "CP-0329"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000330",
+    "party_id": "CP-0330"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000331",
+    "party_id": "CP-0331"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000332",
+    "party_id": "CP-0332"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000333",
+    "party_id": "CP-0333"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000334",
+    "party_id": "CP-0334"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "CP-0144",
+    "in_scope": true,
+    "lei": "LEI0000000000000335",
+    "party_id": "CP-0335"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000336",
+    "party_id": "CP-0336"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000337",
+    "party_id": "CP-0337"
+  },
+  {
+    "classification": "nonfinancial_below",
+    "delegated_to": "",
+    "in_scope": true,
+    "lei": "LEI0000000000000338",
+    "party_id": "CP-0338"
+  },
+  {
+    "classification": "nonfinancial_above",
+    "delegated_to": "",
+    "in_scope": false,
+    "lei": "LEI0000000000000339",
+    "party_id": "CP-0339"
+  },
+  {
+    "classification": "financial",
+    "delegated_to": "CP-0076",
+    "in_scope": true,
+    "lei": "LEI0000000000000340",
+    "party_id": "CP-0340"
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "alternate": {
+    "lines_digest": "47b14e635ea5eda296322d163d9cea12df2cb2dbb369d86b13e1dd0dacfe3989",
+    "queue_digest": "ea89d4d704a89f7808fc593b4b1d2a01db53ed6b1bf0711a5de8fb1cf82f09c1",
+    "summary": {
+      "booking_count": 9887,
+      "effective_deadline_days": 1,
+      "effective_late_grace": 0,
+      "effective_max_submissions": 2500,
+      "effective_notional_floor": 1000000,
+      "eligible_count": 3599,
+      "exception_count": 1099,
+      "late_count": 1030,
+      "reported_count": 2500,
+      "reported_usd_notional": 131120398643,
+      "schema_version": "reg-report-v1",
+      "trade_count": 8343
+    }
+  },
+  "broken_engine_sha256": "9cccf3beb6c05f304d5395e624dbe2c0c7ba8b966147d5042019a8246a843d76",
+  "primary": {
+    "lines_digest": "2884a4c3264e0f0fb81dec7c994a59585ddbeb530f681175fa7d4afadd015cc4",
+    "queue_digest": "9ad9448db77e5bdb99db611c2df8f38aeeaf2eb35191b925bb2d5bbe9df3becc",
+    "summary": {
+      "booking_count": 10510,
+      "effective_deadline_days": 1,
+      "effective_late_grace": 0,
+      "effective_max_submissions": 2500,
+      "effective_notional_floor": 1000000,
+      "eligible_count": 3790,
+      "exception_count": 1290,
+      "late_count": 955,
+      "reported_count": 2500,
+      "reported_usd_notional": 130310570257,
+      "schema_version": "reg-report-v1",
+      "trade_count": 8788
+    }
+  },
+  "recovered_booking_count": 10510,
+  "recovered_ledger_digest": "e0ab7047685883a26caac4267d426ea7679a803e8299f334a813545800b63116",
+  "rule_sources_digest": "7644be7e4cfcc51755bb9ea49ddb5d5a1329e7a44bdda2084c87b2d616417e49",
+  "shipped_truncated_digest": "23945f03f252162847f4b74da45287cca1ebafbc66b404f0f889c035ebd8b301"
+}

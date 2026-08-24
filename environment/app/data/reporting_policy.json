@@ -1,0 +1,8 @@
+{
+  "default": {
+    "deadline_business_days": 1,
+    "late_grace_days": 0,
+    "max_submissions": 2500,
+    "notional_floor_usd": 1000000
+  }
+}

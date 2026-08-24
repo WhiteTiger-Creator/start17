@@ -1,0 +1,9 @@
+{
+  "as_of": "trade_day",
+  "micro_usd_per_unit": {
+    "EUR": 1080000,
+    "GBP": 1270000,
+    "JPY": 6700,
+    "USD": 1000000
+  }
+}

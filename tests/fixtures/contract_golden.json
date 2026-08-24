@@ -1,0 +1,108 @@
+{
+  "cli": {
+    "fixed_paths": [
+      "/app/data/counterparty_register.json",
+      "/app/data/reporting_calendar.json",
+      "/app/data/fx_rates.json",
+      "/app/data/reporting_policy.json"
+    ],
+    "input": "--input selects the transaction ledger only; default /app/data/transaction_ledger.json",
+    "output_dir": "--output-dir selects the output directory; default /app/output"
+  },
+  "contract_version": "reg-report-v1",
+  "description": "Output contract for the transaction-reporting engine. Shapes, paths, field lists and sort orders only; no derivation rule lives here.",
+  "outputs": {
+    "exception_queue": {
+      "container": "jsonl",
+      "element_fields": [
+        "trade_id",
+        "version",
+        "reason"
+      ],
+      "path": "/app/output/exception_queue.jsonl",
+      "reasons": [
+        "over_cap",
+        "unconfirmed"
+      ],
+      "serialisation": "one compact JSON object per line, trailing newline",
+      "sort": "ascending by reason, then trade_id"
+    },
+    "report_lines": {
+      "container": "array",
+      "element_fields": [
+        "trade_id",
+        "version",
+        "filer_lei",
+        "asset_class",
+        "venue",
+        "usd_notional",
+        "trade_day",
+        "deadline_day",
+        "submitted_day",
+        "late"
+      ],
+      "path": "/app/output/report_lines.json",
+      "serialisation": "JSON array, two-space indent, trailing newline",
+      "sort": "ascending by deadline_day, then trade_id"
+    },
+    "summary": {
+      "container": "object",
+      "field_types": {
+        "booking_count": "integer",
+        "effective_deadline_days": "integer",
+        "effective_late_grace": "integer",
+        "effective_max_submissions": "integer",
+        "effective_notional_floor": "integer",
+        "eligible_count": "integer",
+        "exception_count": "integer",
+        "late_count": "integer",
+        "reported_count": "integer",
+        "reported_usd_notional": "integer",
+        "schema_version": "string",
+        "trade_count": "integer"
+      },
+      "path": "/app/output/summary.json",
+      "required_fields": [
+        "schema_version",
+        "booking_count",
+        "trade_count",
+        "eligible_count",
+        "reported_count",
+        "late_count",
+        "exception_count",
+        "reported_usd_notional",
+        "effective_notional_floor",
+        "effective_deadline_days",
+        "effective_max_submissions",
+        "effective_late_grace"
+      ],
+      "serialisation": "JSON object, two-space indent, trailing newline"
+    }
+  },
+  "reconciled_inputs": {
+    "transaction_ledger": {
+      "container": "array",
+      "path": "/app/data/transaction_ledger.json",
+      "record_fields": [
+        "trade_id",
+        "version",
+        "reporting_party",
+        "other_party",
+        "asset_class",
+        "venue",
+        "notional",
+        "currency",
+        "trade_day",
+        "submitted_day",
+        "confirmed"
+      ],
+      "serialisation": "JSON array, two-space indent, trailing newline",
+      "sort": "ascending by trade_id, then version"
+    }
+  },
+  "runtime_budget_seconds": 90,
+  "units": {
+    "days": "integer offsets on the regulatory day grid",
+    "usd_notional": "whole US dollars"
+  }
+}

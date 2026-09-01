@@ -78,8 +78,23 @@ def test_wrong_replays_differ_from_the_governed_ledger():
         rows = sorted(live.values(), key=lambda r: (r["trade_id"], r["version"]))
         return _digest(rows)
 
-    assert replay(False, False) != expected
-    assert replay(True, True) != expected
+    # the governed reading: by sequence, a reinstatement returning the held state.
+    # It must reproduce the sealed digest, or the three below differ only because
+    # this helper does not model the replay at all.
+    assert replay(True, False) == expected, (
+        "the governed replay does not reproduce the sealed ledger, so the "
+        "misreadings below prove nothing")
+    assert replay(False, False) != expected, "a replay in file order"
+    assert replay(True, True) != expected, "a reinstatement re-reading the snapshot"
+
+    # and the third misreading the recovery draft proposed: concatenate the
+    # snapshot with the journal and keep the last row seen for each booking
+    concatenated = {k: dict(v) for k, v in snapshot.items()}
+    for change in journal:
+        concatenated[change["trade_key"]] = dict(change)
+    rows = sorted(concatenated.values(),
+                  key=lambda r: (str(r.get("trade_id", "")), r.get("version", 0)))
+    assert _digest(rows) != expected, "a plain concatenation"
 
 
 # --------------------------------------------------------------------------
@@ -111,6 +126,45 @@ def test_output_dir_contains_exactly_three_files(primary_outputs):
     out_dir, _, _, _ = primary_outputs
     assert sorted(p.name for p in out_dir.iterdir()) == [
         "exception_queue.jsonl", "report_lines.json", "summary.json"]
+
+
+def test_the_artifacts_are_serialised_exactly_as_the_contract_states(primary_outputs):
+    """Read off the raw bytes, which every other check throws away by parsing.
+
+    The contract fixes a serialisation for all four documents and nothing here
+    looked at one, so a run emitting the summary compactly, or the queue with an
+    indent, matched every sealed digest. Each rule below is quoted from the
+    contract section that governs the file.
+    """
+    out_dir = primary_outputs[0]
+    spec = SPEC["outputs"]
+
+    for name, section in (("summary.json", "summary"),
+                          ("report_lines.json", "report_lines")):
+        raw = (out_dir / name).read_text(encoding="utf-8")
+        stated = spec[section]["serialisation"]
+        assert "two-space indent" in stated and "trailing newline" in stated, stated
+        assert raw.endswith("\n") and not raw.endswith("\n\n"), (
+            f"{name} must end in exactly one newline")
+        decoded = json.loads(raw)
+        assert raw == json.dumps(decoded, indent=2) + "\n", (
+            f"{name} is not the contract's two-space indent")
+
+    raw = (out_dir / "exception_queue.jsonl").read_text(encoding="utf-8")
+    assert "compact JSON object per line" in spec["exception_queue"]["serialisation"]
+    assert raw.endswith("\n"), "the queue must end in a newline"
+    for line in raw.splitlines():
+        assert line.strip(), "the queue carries a blank line"
+        assert line == json.dumps(json.loads(line), separators=(",", ":")), (
+            "a queue line is not compact JSON")
+
+    # the rebuilt ledger is a graded artifact too, and carries its own rule
+    raw = LEDGER_PATH.read_text(encoding="utf-8")
+    stated = SPEC["reconciled_inputs"]["transaction_ledger"]["serialisation"]
+    assert "two-space indent" in stated and "trailing newline" in stated, stated
+    assert raw.endswith("\n") and not raw.endswith("\n\n")
+    assert raw == json.dumps(json.loads(raw), indent=2) + "\n", (
+        "the rebuilt ledger is not the contract's two-space indent")
 
 
 def test_summary_schema_and_types(primary_outputs):
@@ -347,6 +401,43 @@ def test_policy_path_actually_influences_the_output():
         (DATA / "reporting_policy.json").write_text(saved, encoding="utf-8")
 
 
+def test_a_policy_that_omits_a_field_keeps_the_governed_baseline():
+    """#REG-7210 fixes a baseline per field, and the shipped policy hides it.
+
+    Every shipped value equals its own baseline, so dropping a field from the
+    file that ships changes nothing and an engine that read the policy as
+    all-or-nothing graded the same as one following the decision. Each field is
+    therefore first set to something the baseline is not, then dropped on its
+    own: the dropped one has to fall back while the others keep the staged
+    figure, so a fallback that only fires on an empty file is not enough either.
+    """
+    path = DATA / "reporting_policy.json"
+    saved = path.read_text(encoding="utf-8")
+    baselines = {"notional_floor_usd": 1_000_000, "deadline_business_days": 1,
+                 "max_submissions": 2500, "late_grace_days": 0}
+    staged = {"notional_floor_usd": 4_000_000, "deadline_business_days": 3,
+              "max_submissions": 60, "late_grace_days": 2}
+    reported = {"notional_floor_usd": "effective_notional_floor",
+                "deadline_business_days": "effective_deadline_days",
+                "max_submissions": "effective_max_submissions",
+                "late_grace_days": "effective_late_grace"}
+    assert all(staged[f] != baselines[f] for f in baselines), (
+        "a staged value equals its baseline, so dropping that field proves nothing")
+    try:
+        for field in baselines:
+            trimmed = {k: v for k, v in staged.items() if k != field}
+            _write_json(path, {"default": trimmed})
+            _, summary, _, _ = _run_pipeline()
+            assert summary[reported[field]] == baselines[field], (
+                f"dropping {field} did not fall back to {baselines[field]}")
+            for other in baselines:
+                if other != field:
+                    assert summary[reported[other]] == staged[other], (
+                        f"dropping {field} disturbed {other}")
+    finally:
+        path.write_text(saved, encoding="utf-8")
+
+
 def test_register_path_actually_influences_the_output():
     """The counterparty register is resolved from its fixed path too."""
     saved = (DATA / "counterparty_register.json").read_text(encoding="utf-8")
@@ -440,22 +531,39 @@ def test_governance_log_present():
     assert LOG_PATH.exists() and LOG_PATH.stat().st_size > 0
 
 
-def test_calendar_actually_influences_the_output():
+def test_calendar_actually_influences_the_output(primary_outputs):
     """The regulatory calendar is resolved from its fixed path, not inlined."""
     path = DATA / "reporting_calendar.json"
     saved = path.read_text(encoding="utf-8")
     try:
         cal = _load_json(path)
+        closed = set(cal["non_business_days"])
+        assert closed, "the shipped calendar closes no day, so this proves nothing"
         cal["non_business_days"] = []
         _write_json(path, cal)
         _, summary, lines, _ = _run_pipeline()
-        assert summary != FIXTURE["primary"]["summary"]
         assert lines, "opening the calendar must still produce a return"
+        # with every day open, counting business days forward is plain calendar
+        # arithmetic, so each deadline is exactly the trade day plus the policy's
+        # span -- a run that merely noticed new bytes lands nowhere near this
+        span = summary["effective_deadline_days"]
+        by_trade = {row["trade_id"]: row for row in lines}
+        for row in lines:
+            assert row["deadline_day"] == row["trade_day"] + span, row["trade_id"]
+        # and no deadline can be later than it was when days were closed
+        base = {row["trade_id"]: row["deadline_day"] for row in primary_outputs[2]}
+        assert any(base[r["trade_id"]] != r["deadline_day"]
+                   for r in lines if r["trade_id"] in base), (
+            "opening every closed day moved no deadline, so the calendar is unused")
+        assert all(r["deadline_day"] <= base[r["trade_id"]]
+                   for r in lines if r["trade_id"] in base), (
+            "opening a closed day moved a deadline later")
+        assert summary != FIXTURE["primary"]["summary"]
     finally:
         path.write_text(saved, encoding="utf-8")
 
 
-def test_rate_table_actually_influences_the_output():
+def test_rate_table_actually_influences_the_output(primary_outputs):
     """The rate table is resolved from its fixed path; a currency it drops files nothing."""
     path = DATA / "fx_rates.json"
     saved = path.read_text(encoding="utf-8")
@@ -464,7 +572,25 @@ def test_rate_table_actually_influences_the_output():
         dropped = sorted(fx["micro_usd_per_unit"])[0]
         del fx["micro_usd_per_unit"][dropped]
         _write_json(path, fx)
-        _, summary, _, _ = _run_pipeline()
+        _, summary, lines, _ = _run_pipeline()
+        # the currency has no rate, so nothing denominated in it can be carried
+        # into dollars and tested against the floor: those trades and only those
+        # leave the return, and every other reported line is untouched
+        # only the highest version of a trade is ever reported, so that is the
+        # row whose currency decides whether the line can be priced
+        ledger = {}
+        for row in _load_json(LEDGER_PATH):
+            live = ledger.get(row["trade_id"])
+            if live is None or row["version"] > live["version"]:
+                ledger[row["trade_id"]] = row
+        for row in lines:
+            assert ledger[row["trade_id"]]["currency"] != dropped, (
+                f"{row['trade_id']} is priced in {dropped}, which now has no rate")
+        before = {r["trade_id"] for r in primary_outputs[2]}
+        gone = before - {r["trade_id"] for r in lines}
+        assert gone, f"no reported trade was priced in {dropped}, so this proves nothing"
+        assert all(ledger[t]["currency"] == dropped for t in gone), (
+            "dropping one rate removed a trade priced in some other currency")
         assert summary["eligible_count"] < FIXTURE["primary"]["summary"]["eligible_count"]
     finally:
         path.write_text(saved, encoding="utf-8")

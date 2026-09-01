@@ -87,9 +87,7 @@ func writeJSON(path string, value any) {
 	}
 }
 
-// #REG-7190: the deadline is reached by counting BUSINESS days forward from the
-// trade day, skipping every day the regulatory calendar closes. The trade day
-// itself is never counted, and a deadline landing past the horizon still counts.
+// Reaches the reporting deadline for a trade day.
 func addBusinessDays(day, n int, nonBusiness map[int]bool) int {
 	_ = nonBusiness
 	return day + n
@@ -105,9 +103,8 @@ func main() {
 	var cal calendar
 	var fx fxTable
 	var pol policy
-	// #REG-7150: the counterparty register, the calendar, the rate table and the
-	// policy are always read from their fixed absolute paths; --input selects the
-	// ledger only.
+	// the register, calendar, rates and policy live at fixed paths;
+	// --input selects the ledger only
 	readJSON("/app/data/counterparty_register.json", &register)
 	readJSON("/app/data/reporting_calendar.json", &cal)
 	readJSON("/app/data/fx_rates.json", &fx)
@@ -128,9 +125,7 @@ func main() {
 		byParty[p.PartyID] = p
 	}
 
-	// #REG-7182: a re-booked trade supersedes its earlier versions, so only the
-	// HIGHEST version of each trade id is considered; the superseded bookings are
-	// dropped without comment rather than reported or queued.
+	// picking one booking per trade id
 	best := map[string]trade{}
 	for _, t := range ledger {
 		if cur, ok := best[t.TradeID]; !ok || t.Version < cur.Version {
@@ -159,9 +154,7 @@ func main() {
 		if !ok {
 			continue
 		}
-		// #REG-7186: eligibility follows the REPORTING side alone -- the other side's
-		// scope never enters it. A party below the clearing threshold is out of scope
-		// for reporting however large the trade.
+		// whether this trade is in scope
 		op, okOther := byParty[t.OtherParty]
 		if !rp.InScope || !okOther || !op.InScope ||
 			rp.Classification == "nonfinancial_below" {
@@ -171,17 +164,14 @@ func main() {
 		if rate == 0 {
 			continue
 		}
-		// #REG-7188: the notional is carried into USD at the table's rate and floored
-		// to whole dollars before it meets the threshold.
+		// the notional in USD
 		usd := (t.Notional * rate) / 1_000_000
 		if usd < floorUSD {
 			continue
 		}
 		eligible++
 
-		// #REG-7192: where the reporting party has delegated, the delegate files and
-		// the delegate's LEI is the one reported; the delegate's own scope does not
-		// re-open the eligibility question.
+		// who files this one
 		filer := rp
 		if rp.DelegatedTo != "" {
 			if d, ok := byParty[rp.DelegatedTo]; ok {
@@ -193,9 +183,8 @@ func main() {
 		if late {
 			lateCount++
 		}
-		if false {
-			// #REG-7194: an unconfirmed booking is never submitted; it is queued and
-			// takes no place against the submission cap.
+		if !t.Confirmed && t.Notional == 0 {
+			// a booking still under review is held back
 			exceptions = append(exceptions, exceptionRow{t.TradeID, t.Version, "unconfirmed"})
 			continue
 		}
@@ -207,8 +196,7 @@ func main() {
 		}})
 	}
 
-	// #REG-7196: submissions are taken in deadline order, earliest first, then by
-	// trade id; everything past the cap is queued in that same order.
+	// emission order for the submissions and the queue
 	sort.Slice(pending, func(i, j int) bool {
 		if pending[i].line.DeadlineDay != pending[j].line.DeadlineDay {
 			return pending[i].line.DeadlineDay < pending[j].line.DeadlineDay

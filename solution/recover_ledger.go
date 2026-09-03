@@ -46,23 +46,53 @@ func readJSON(path string, into any) {
 	}
 }
 
+// setField applies one amendment. #REG-7170 says an amend overwrites THE NAMED
+// FIELD in place without naming a subset, so every one of the nine mutable
+// booking fields is handled here. trade_id and version are left out on purpose:
+// they are the key the change is matched on, so an amendment cannot rewrite the
+// identity of the booking it is addressed to. The shipped journal only ever
+// amends venue and notional, which is why a narrower handler happened to agree
+// with it; a conforming journal that amends any other field would not.
 func setField(t *trade, field string, value any) {
-	switch field {
-	case "venue":
+	str := func(dst *string) {
 		if s, ok := value.(string); ok {
-			t.Venue = s
+			*dst = s
 		}
-	case "asset_class":
-		if s, ok := value.(string); ok {
-			t.AssetClass = s
-		}
-	case "notional":
+	}
+	num := func(set func(int64)) {
 		switch v := value.(type) {
 		case float64:
-			t.Notional = int64(v)
+			set(int64(v))
 		case string:
 			if n, err := strconv.ParseInt(v, 10, 64); err == nil {
-				t.Notional = n
+				set(n)
+			}
+		}
+	}
+	switch field {
+	case "reporting_party":
+		str(&t.ReportingParty)
+	case "other_party":
+		str(&t.OtherParty)
+	case "asset_class":
+		str(&t.AssetClass)
+	case "venue":
+		str(&t.Venue)
+	case "currency":
+		str(&t.Currency)
+	case "notional":
+		num(func(n int64) { t.Notional = n })
+	case "trade_day":
+		num(func(n int64) { t.TradeDay = int(n) })
+	case "submitted_day":
+		num(func(n int64) { t.SubmittedDay = int(n) })
+	case "confirmed":
+		switch v := value.(type) {
+		case bool:
+			t.Confirmed = v
+		case string:
+			if b, err := strconv.ParseBool(v); err == nil {
+				t.Confirmed = b
 			}
 		}
 	}

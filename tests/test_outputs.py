@@ -595,7 +595,10 @@ def test_submitted_program_runs_unprivileged_and_cannot_write_reward(tmp_path):
         '\tfmt.Println(err != nil)\n}\n', encoding="utf-8")
     binary = _build(probe)
     result = _run_agent([binary], cwd=_candidate_dir())
-    assert result.returncode == 0, result.stderr
+    # the exit code is a precondition; the verdict is the two lines the probe printed
+    assert result.returncode == 0, (
+        f"the probe exited {result.returncode}\n"
+        f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
     parts = result.stdout.split()
     assert parts[0] == str(CANDIDATE_UID) and parts[1] == "true"
 

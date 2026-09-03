@@ -128,6 +128,56 @@ def test_output_dir_contains_exactly_three_files(primary_outputs):
         "exception_queue.jsonl", "report_lines.json", "summary.json"]
 
 
+def test_a_run_writes_nothing_outside_its_output_directory():
+    """instruction.md scopes a run to its --output-dir, and nothing checked it.
+
+    Every other run here reads the three artifacts by name, so a run that also
+    dropped a scratch file beside them, or in the directory it was started from,
+    satisfied all of them. This walks the whole work area afterwards.
+    """
+    _publish_inputs()
+    work = _candidate_dir()
+    out_dir = work / "output"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    os.chmod(out_dir, 0o777)
+    staged = work / "ledger.json"
+    shutil.copyfile(str(LEDGER_PATH), str(staged))
+    os.chmod(staged, 0o644)
+
+    before = {str(q.relative_to(work)) for q in work.rglob("*")}
+    binary = _build(WORKFLOW_PATH)
+    result = _run_agent([binary, "--input", str(staged), "--output-dir", str(out_dir)], cwd=work)
+    # the exit code is only a precondition; the verdict is the whole-tree diff below
+    assert result.returncode == 0, (
+        f"the run exited {result.returncode}\n"
+        f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
+    after = {str(q.relative_to(work)) for q in work.rglob("*")}
+    written = sorted(after - before)
+    assert written == ["output/exception_queue.jsonl", "output/report_lines.json",
+                       "output/summary.json"], written
+
+
+def test_the_engine_is_one_file_with_no_sibling_source():
+    """instruction.md names the case to reject: a helper split into a sibling source.
+
+    _build compiles /app/workflow/build_report.go on its own, so a split
+    submission fails to build and every artifact test collapses at once with a
+    compiler error. Nothing said why. This checks the rule the instruction
+    actually states, and reports the offending files by name.
+    """
+    engine = WORKFLOW_PATH.resolve()
+    # the go tool ignores sources whose name starts with "." or "_", so the frozen
+    # copy sitting beside the engine is not a sibling in the sense that matters
+    siblings = sorted(q.name for q in WORKFLOW_PATH.parent.glob("*.go")
+                      if q.resolve() != engine and not q.name.startswith((".", "_")))
+    assert siblings == [], (
+        "the engine is one package main in one file compiled on its own, so these "
+        f"sibling sources never reach the build: {siblings}")
+    stray = sorted(q.name for q in WORKFLOW_PATH.parent.glob("go.*"))
+    assert stray == [], f"the build takes the one file, not a module: {stray}"
+    _build(WORKFLOW_PATH)
+
+
 def test_the_artifacts_are_serialised_exactly_as_the_contract_states(primary_outputs):
     """Read off the raw bytes, which every other check throws away by parsing.
 
@@ -494,16 +544,28 @@ def test_no_argument_run_writes_to_the_documented_defaults(primary_outputs):
     binary = _build(WORKFLOW_PATH)
     _publish_inputs()
     default_out = Path("/app/output")
-    shutil.rmtree(default_out, ignore_errors=True)
-    default_out.mkdir(parents=True, exist_ok=True)
-    os.chmod(default_out, 0o777)
-    result = _run_agent([binary], cwd=_candidate_dir())
-    assert result.returncode == 0, result.stderr
-    assert sorted(q.name for q in default_out.iterdir()) == ['exception_queue.jsonl', 'report_lines.json', 'summary.json']
-    _, summary, doc, queue = primary_outputs
-    assert _load_json(default_out / "summary.json") == summary
-    assert _digest(_load_json(default_out / "report_lines.json")) == _digest(doc)
-    assert _digest(_load_jsonl(default_out / "exception_queue.jsonl")) == _digest(queue)
+    # the directory ships with the image; emptying it is what this test needs, but
+    # its mode belongs to the environment and is put back either way
+    mode = default_out.stat().st_mode & 0o7777 if default_out.exists() else 0o777
+    try:
+        for stale in sorted(default_out.rglob("*"), reverse=True):
+            stale.unlink() if stale.is_file() or stale.is_symlink() else stale.rmdir()
+        default_out.mkdir(parents=True, exist_ok=True)
+        os.chmod(default_out, 0o777)
+        result = _run_agent([binary], cwd=_candidate_dir())
+        # the exit code is a precondition; the verdict is the three files and their content
+        assert result.returncode == 0, (
+            f"the run exited {result.returncode}\n"
+            f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
+        assert sorted(q.name for q in default_out.iterdir()) == [
+            'exception_queue.jsonl', 'report_lines.json', 'summary.json']
+        _, summary, doc, queue = primary_outputs
+        assert _load_json(default_out / "summary.json") == summary
+        assert _digest(_load_json(default_out / "report_lines.json")) == _digest(doc)
+        assert _digest(_load_jsonl(default_out / "exception_queue.jsonl")) == _digest(queue)
+    finally:
+        if default_out.exists():
+            os.chmod(default_out, mode)
 
 
 def test_the_budget_is_enforced_by_killing_an_overrunning_run(primary_outputs):

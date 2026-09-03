@@ -1,8 +1,8 @@
 # Planning governance log
 
-How the reporting engine is *meant* to behave -- the recovery of the truncated transaction ledger, which side carries the obligation, how a re-booking supersedes what came before, how the threshold and the deadline are reached, who files a delegated report and what happens to an unconfirmed booking -- was settled incrementally by the compliance committee, and those decisions live in the review entries below, not in any single summary. Several stages deliberately DEVIATE from the intuitive reading: the obligation follows the reporting side alone rather than both sides, the latest re-booking supersedes the first, the deadline counts business days rather than calendar days, and an unconfirmed booking is queued without consuming the cap. The February draft proposals were revisited during the 2026-05 controls review and several were reversed; where a draft or interim conflicts with a later decision, the later dated decision governs. `/app/docs/reporting_contract.json` is the output contract only.
+How the reporting engine is *meant* to behave -- the recovery of the truncated transaction ledger, which side carries the obligation, how a re-booking supersedes what came before, how the threshold and the deadline are reached, who files a delegated report and what happens to an unconfirmed booking -- was settled incrementally by the compliance committee, and those decisions live in the review entries below, not in any single summary. Several stages deliberately depart from the intuitive reading, and which ones they are is settled in the entries below rather than here. The February draft proposals were revisited during the 2026-05 controls review and several were reversed; where a draft or interim conflicts with a later decision, the later dated decision governs. `/app/docs/reporting_contract.json` is the output contract only.
 
-- 2026-02-08: Surveillance desk noted rejected acknowledgements from the reconciliation batch in window 1003. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-08: A stand-up note carried forward a routine observation. A question raised on the floor was withdrawn once the entry was reread. The thread was archived after review.
 
 > **Recovery draft proposal (2026-02-06 - #REG-7020)** Rosa: rebuild the truncated ledger by concatenating the pre-migration snapshot with the migration journal and keeping the last row seen for each booking; a reinstated booking is re-read from the snapshot *(Superseded -- reversed in the 2026-05 controls review.)*
 
@@ -10,135 +10,135 @@ How the reporting engine is *meant* to behave -- the recovery of the truncated t
 
 > **Recovery draft proposal (2026-02-19 - #REG-7032)** Marek: the reporting deadline is the trade day plus the policy's day count in plain calendar days *(Superseded -- reversed in the 2026-05 controls review.)*
 
-- 2026-02-20: Surveillance desk noted rejected acknowledgements from the confirmations feed in window 1004. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-20: A stand-up note spot-checked a routine observation. The variance sat inside tolerance and no adjustment was raised.
 
-- 2026-02-18: Compliance stand-up recorded a routine note against the reconciliation batch for window 1005. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-18: The controls team signed off a routine observation. A query about a prior-period entry was answered from the published schedule. No follow-up was requested.
 
-- 2026-02-25: Controls review of the venue adaptor in window 1008 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-02-25: A weekly review spot-checked a routine observation. Nightly reconciliation matched exactly and the file was released without comment.
 
-- 2026-02-16: Compliance stand-up recorded a routine note against the reconciliation batch for window 1009. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-16: The controls team carried forward a routine observation. Nightly reconciliation matched exactly and the file was released without comment. No action was carried forward.
 
-- 2026-02-06: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1010. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-06: The controls team spot-checked a routine observation. The count sat a little above the running mean, entirely from estimated inputs. The thread was archived after review.
 
-- 2026-02-01: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1013. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-01: The audit lead signed off a routine observation. Late inputs arrived from one feed and were loaded before the cut. The desk confirmed no downstream impact.
 
-- 2026-02-20: Officer on duty logged a routine observation for the reference-data service during review window 1015. Rejection-rate drift reviewed; no policy change requested.
+- 2026-02-20: A shift handover raised and closed a routine observation. Late inputs arrived from one feed and were loaded before the cut. Referred to the dated decisions and closed.
 
-- 2026-02-05: Controls review of the confirmations feed in window 1016 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-02-05: A weekly review spot-checked a routine observation. A query about a prior-period entry was answered from the published schedule.
 
-- 2026-02-01: Surveillance desk noted rejected acknowledgements from the submission gateway in window 1019. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-01: The reconciliation desk logged a routine observation. A duplicate order was cancelled at source and never reached the run. Closed with no parameter change.
 
-- 2026-02-02: Compliance stand-up recorded a routine note against the reference-data service for window 1022. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-02: The audit lead noted a routine observation. A typo in a reference record was corrected before the run started. The desk confirmed no downstream impact.
 
-- 2026-02-23: Compliance stand-up recorded a routine note against the venue adaptor for window 1023. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-23: A reviewer on shift reviewed a routine observation. The overnight window ran long behind an unrelated platform patch. The desk confirmed no downstream impact.
 
-- 2026-02-26: Controls review of the reference-data service in window 1024 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-02-26: The exceptions queue owner signed off a routine observation. Storage on the staging host was extended after the export outgrew its allocation. No follow-up was requested.
 
-- 2026-02-09: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1025. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-09: A shift handover opened a query on a routine observation. Dashboard tiles lagged the refresh; traced to cache staleness rather than the engine. Referred to the dated decisions and closed.
 
-- 2026-02-22: Controls review of the submission gateway in window 1027 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-02-22: The platform team recorded a routine observation. A question raised on the floor was withdrawn once the entry was reread. The desk confirmed no downstream impact.
 
-- 2026-02-07: Surveillance desk noted rejected acknowledgements from the submission gateway in window 1029. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-02-07: The reconciliation desk signed off a routine observation. A batch retried once after a transient timeout and completed on the second pass. No follow-up was requested.
 
-- 2026-02-01: Officer on duty logged a routine observation for the venue adaptor during review window 1032. Rejection-rate drift reviewed; no policy change requested.
+- 2026-02-01: The duty analyst spot-checked a routine observation. The overnight window ran long behind an unrelated platform patch. Nothing here bears on engine behaviour.
 
-- 2026-02-11: Officer on duty logged a routine observation for the confirmations feed during review window 1033. Rejection-rate drift reviewed; no policy change requested.
+- 2026-02-11: The operations desk opened a query on a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. Referred to the dated decisions and closed.
 
-- 2026-02-24: Compliance stand-up recorded a routine note against the submission gateway for window 1035. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-24: The controls team noted a routine observation. One record appeared twice in the export after a mid-cycle correction. The thread was archived after review.
 
-- 2026-02-17: Compliance stand-up recorded a routine note against the venue adaptor for window 1037. The resubmission backlog was cleared with no amendment raised.
+- 2026-02-17: A stand-up note raised and closed a routine observation. Dashboard tiles lagged the refresh; traced to cache staleness rather than the engine.
 
-- 2026-03-13: Surveillance desk noted rejected acknowledgements from the submission gateway in window 1038. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-03-13: An on-call engineer opened a query on a routine observation. A duplicate order was cancelled at source and never reached the run.
 
 > **Interim decision (2026-03-05 - #REG-7038)** Priya: where a trade has been re-booked, the FIRST version is the one reported, the later ones being corrections to the same filing *(Revised -- see the 2026-05 controls review.)*
 
-- 2026-03-03: Controls review of the confirmations feed in window 1039 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-03: The reconciliation desk raised and closed a routine observation. The variance sat inside tolerance and no adjustment was raised. Filed for the record.
 
-- 2026-03-04: Controls review of the submission gateway in window 1042 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-04: The exceptions queue owner carried forward a routine observation. Storage on the staging host was extended after the export outgrew its allocation. Referred to the dated decisions and closed.
 
-- 2026-03-17: Controls review of the reference-data service in window 1044 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-17: A shift handover filed a routine observation. One record appeared twice in the export after a mid-cycle correction.
 
-- 2026-03-27: Controls review of the submission gateway in window 1047 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-27: The controls team carried forward a routine observation. Late inputs arrived from one feed and were loaded before the cut. No follow-up was requested.
 
-- 2026-03-04: Compliance stand-up recorded a routine note against the venue adaptor for window 1048. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-04: The exceptions queue owner logged a routine observation. A batch retried once after a transient timeout and completed on the second pass. Filed for the record.
 
-- 2026-03-27: Controls review of the reference-data service in window 1051 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-27: The reconciliation desk filed a routine observation. An operator asked whether a credit had posted; it had, in the preceding period.
 
-- 2026-03-19: Surveillance desk noted rejected acknowledgements from the submission gateway in window 1052. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-03-19: The duty analyst carried forward a routine observation. The overnight window ran long behind an unrelated platform patch.
 
-- 2026-03-23: Controls review of the reference-data service in window 1055 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-23: A reviewer on shift raised and closed a routine observation. The count sat a little above the running mean, entirely from estimated inputs. No follow-up was requested.
 
-- 2026-03-11: Controls review of the submission gateway in window 1056 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-11: The exceptions queue owner recorded a routine observation. A typo in a reference record was corrected before the run started. The desk confirmed no downstream impact.
 
-- 2026-03-13: Officer on duty logged a routine observation for the reference-data service during review window 1058. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-13: The platform team opened a query on a routine observation. One record appeared twice in the export after a mid-cycle correction. Filed for the record.
 
-- 2026-03-15: Officer on duty logged a routine observation for the venue adaptor during review window 1059. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-15: A shift handover signed off a routine observation. A query about a prior-period entry was answered from the published schedule.
 
-- 2026-03-05: Compliance stand-up recorded a routine note against the reconciliation batch for window 1060. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-05: A weekly review logged a routine observation. Storage on the staging host was extended after the export outgrew its allocation. The thread was archived after review.
 
-- 2026-03-04: Compliance stand-up recorded a routine note against the confirmations feed for window 1063. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-04: A shift handover recorded a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. Referred to the dated decisions and closed.
 
-- 2026-03-19: Officer on duty logged a routine observation for the venue adaptor during review window 1065. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-19: The audit lead raised and closed a routine observation. Storage on the staging host was extended after the export outgrew its allocation. Referred to the dated decisions and closed.
 
-- 2026-03-21: Controls review of the submission gateway in window 1066 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-21: The operations desk spot-checked a routine observation. A query about a prior-period entry was answered from the published schedule. The thread was archived after review.
 
-- 2026-03-21: Officer on duty logged a routine observation for the reconciliation batch during review window 1067. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-21: The exceptions queue owner opened a query on a routine observation. Dashboard tiles lagged the refresh; traced to cache staleness rather than the engine. The thread was archived after review.
 
-- 2026-03-07: Compliance stand-up recorded a routine note against the reconciliation batch for window 1068. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-07: A shift handover recorded a routine observation. Storage on the staging host was extended after the export outgrew its allocation. Nothing here bears on engine behaviour.
 
-- 2026-03-23: Officer on duty logged a routine observation for the reconciliation batch during review window 1069. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-23: The audit lead raised and closed a routine observation. Nightly reconciliation matched exactly and the file was released without comment. No action was carried forward.
 
-- 2026-03-13: Surveillance desk noted rejected acknowledgements from the reconciliation batch in window 1071. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-03-13: The platform team opened a query on a routine observation. One record appeared twice in the export after a mid-cycle correction. Nothing here bears on engine behaviour.
 
-- 2026-03-12: Compliance stand-up recorded a routine note against the venue adaptor for window 1073. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-12: A shift handover noted a routine observation. Storage on the staging host was extended after the export outgrew its allocation.
 
-- 2026-03-11: Compliance stand-up recorded a routine note against the reconciliation batch for window 1075. The resubmission backlog was cleared with no amendment raised.
+- 2026-03-11: The reconciliation desk logged a routine observation. Late inputs arrived from one feed and were loaded before the cut. The desk confirmed no downstream impact.
 
-- 2026-03-01: Surveillance desk noted rejected acknowledgements from the confirmations feed in window 1076. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-03-01: A weekly review carried forward a routine observation. Dashboard tiles lagged the refresh; traced to cache staleness rather than the engine. The thread was archived after review.
 
-- 2026-03-18: Controls review of the reconciliation batch in window 1079 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-03-18: The exceptions queue owner noted a routine observation. Nightly reconciliation matched exactly and the file was released without comment. No action was carried forward.
 
-- 2026-03-25: Officer on duty logged a routine observation for the reconciliation batch during review window 1082. Rejection-rate drift reviewed; no policy change requested.
+- 2026-03-25: The audit lead filed a routine observation. Late inputs arrived from one feed and were loaded before the cut. Referred to the dated decisions and closed.
 
-- 2026-04-23: Officer on duty logged a routine observation for the reconciliation batch during review window 1083. Rejection-rate drift reviewed; no policy change requested.
+- 2026-04-23: A stand-up note carried forward a routine observation. One record appeared twice in the export after a mid-cycle correction. The thread was archived after review.
 
-- 2026-04-17: Controls review of the venue adaptor in window 1085 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-04-17: A shift handover carried forward a routine observation. An operator asked whether a credit had posted; it had, in the preceding period.
 
-- 2026-04-20: Compliance stand-up recorded a routine note against the reference-data service for window 1087. The resubmission backlog was cleared with no amendment raised.
+- 2026-04-20: A stand-up note raised and closed a routine observation. The downstream vendor confirmed receipt inside the agreed window. The thread was archived after review.
 
-- 2026-04-12: Compliance stand-up recorded a routine note against the reference-data service for window 1088. The resubmission backlog was cleared with no amendment raised.
+- 2026-04-12: The exceptions queue owner filed a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. No action was carried forward.
 
-- 2026-04-12: Controls review of the reconciliation batch in window 1090 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-04-12: The operations desk recorded a routine observation. The variance sat inside tolerance and no adjustment was raised.
 
-- 2026-04-12: Controls review of the confirmations feed in window 1093 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-04-12: The exceptions queue owner spot-checked a routine observation. The variance sat inside tolerance and no adjustment was raised. Nothing here bears on engine behaviour.
 
-- 2026-04-01: Officer on duty logged a routine observation for the venue adaptor during review window 1094. Rejection-rate drift reviewed; no policy change requested.
+- 2026-04-01: The audit lead filed a routine observation. Two accounts showed a same-day transfer the export had not yet picked up. No follow-up was requested.
 
-- 2026-04-12: Surveillance desk noted rejected acknowledgements from the confirmations feed in window 1097. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-12: The controls team reviewed a routine observation. Late inputs arrived from one feed and were loaded before the cut. Nothing here bears on engine behaviour.
 
-- 2026-04-05: Compliance stand-up recorded a routine note against the venue adaptor for window 1100. The resubmission backlog was cleared with no amendment raised.
+- 2026-04-05: A weekly review logged a routine observation. Nightly reconciliation matched exactly and the file was released without comment.
 
-- 2026-04-18: Officer on duty logged a routine observation for the reconciliation batch during review window 1103. Rejection-rate drift reviewed; no policy change requested.
+- 2026-04-18: The reconciliation desk logged a routine observation. A question raised on the floor was withdrawn once the entry was reread.
 
-- 2026-04-16: Surveillance desk noted rejected acknowledgements from the submission gateway in window 1104. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-16: A weekly review recorded a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. Referred to the dated decisions and closed.
 
-- 2026-04-23: Officer on duty logged a routine observation for the submission gateway during review window 1107. Rejection-rate drift reviewed; no policy change requested.
+- 2026-04-23: A shift handover carried forward a routine observation. Storage on the staging host was extended after the export outgrew its allocation. Closed with no parameter change.
 
-- 2026-04-18: Controls review of the reference-data service in window 1108 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-04-18: A stand-up note recorded a routine observation. The variance sat inside tolerance and no adjustment was raised. Nothing here bears on engine behaviour.
 
-- 2026-04-23: Surveillance desk noted rejected acknowledgements from the reference-data service in window 1110. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-23: An on-call engineer signed off a routine observation. The count sat a little above the running mean, entirely from estimated inputs. Referred to the dated decisions and closed.
 
-- 2026-04-06: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1111. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-06: The reconciliation desk signed off a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. Filed for the record.
 
-- 2026-04-06: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1114. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-06: The audit lead filed a routine observation. A batch retried once after a transient timeout and completed on the second pass. Closed with no parameter change.
 
-- 2026-04-18: Controls review of the confirmations feed in window 1117 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-04-18: The exceptions queue owner noted a routine observation. A typo in a reference record was corrected before the run started. Closed with no parameter change.
 
-- 2026-04-08: Surveillance desk noted rejected acknowledgements from the reconciliation batch in window 1118. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-08: The duty analyst carried forward a routine observation. Two accounts showed a same-day transfer the export had not yet picked up. No follow-up was requested.
 
-- 2026-04-11: Surveillance desk noted rejected acknowledgements from the reference-data service in window 1121. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-04-11: A reviewer on shift recorded a routine observation. Nightly reconciliation matched exactly and the file was released without comment.
 
-- 2026-05-19: Officer on duty logged a routine observation for the confirmations feed during review window 1123. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-19: An on-call engineer signed off a routine observation. A duplicate order was cancelled at source and never reached the run. Filed for the record.
 
 > **Governance decision (2026-05-05 - #REG-7150)** Priya: Input paths, final. The counterparty register, the regulatory calendar, the rate table and the reporting policy are always read from their fixed absolute paths under /app/data; `--input` selects the transaction ledger only. Both `--input` and `--output-dir` keep their documented defaults.
 
@@ -160,86 +160,86 @@ How the reporting engine is *meant* to behave -- the recovery of the truncated t
 
 > **Governance decision (2026-05-29 - #REG-7196)** Lena: Submission order, final. Submissions are taken in deadline order, earliest first, then by trade id, until the policy's max_submissions is reached; every eligible confirmed booking past the cap is queued as `over_cap`. The queue is emitted by reason and then by trade id.
 
-- 2026-05-05: Compliance stand-up recorded a routine note against the venue adaptor for window 1126. The resubmission backlog was cleared with no amendment raised.
+- 2026-05-05: The platform team noted a routine observation. Storage on the staging host was extended after the export outgrew its allocation.
 
-- 2026-05-03: Surveillance desk noted rejected acknowledgements from the confirmations feed in window 1129. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-05-03: The platform team logged a routine observation. One record appeared twice in the export after a mid-cycle correction. No follow-up was requested.
 
-- 2026-05-23: Officer on duty logged a routine observation for the confirmations feed during review window 1131. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-23: The controls team reviewed a routine observation. Two accounts showed a same-day transfer the export had not yet picked up.
 
-- 2026-05-01: Controls review of the reconciliation batch in window 1134 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-01: A stand-up note logged a routine observation. The count sat a little above the running mean, entirely from estimated inputs. No follow-up was requested.
 
-- 2026-05-24: Compliance stand-up recorded a routine note against the reconciliation batch for window 1135. The resubmission backlog was cleared with no amendment raised.
+- 2026-05-24: The exceptions queue owner raised and closed a routine observation. One record appeared twice in the export after a mid-cycle correction.
 
-- 2026-05-13: Officer on duty logged a routine observation for the confirmations feed during review window 1136. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-13: The reconciliation desk logged a routine observation. A batch retried once after a transient timeout and completed on the second pass. Closed with no parameter change.
 
-- 2026-05-22: Officer on duty logged a routine observation for the reference-data service during review window 1139. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-22: The reconciliation desk recorded a routine observation. A question raised on the floor was withdrawn once the entry was reread. The desk confirmed no downstream impact.
 
-- 2026-05-19: Controls review of the venue adaptor in window 1142 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-19: The duty analyst spot-checked a routine observation. Storage on the staging host was extended after the export outgrew its allocation. No action was carried forward.
 
-- 2026-05-20: Controls review of the confirmations feed in window 1145 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-20: The exceptions queue owner reviewed a routine observation. A typo in a reference record was corrected before the run started. Filed for the record.
 
-- 2026-05-19: Officer on duty logged a routine observation for the reference-data service during review window 1147. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-19: A reviewer on shift signed off a routine observation. A typo in a reference record was corrected before the run started. Filed for the record.
 
-- 2026-05-26: Compliance stand-up recorded a routine note against the confirmations feed for window 1148. The resubmission backlog was cleared with no amendment raised.
+- 2026-05-26: The operations desk carried forward a routine observation. Nightly reconciliation matched exactly and the file was released without comment. The thread was archived after review.
 
-- 2026-05-21: Controls review of the reference-data service in window 1151 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-21: The audit lead signed off a routine observation. One record appeared twice in the export after a mid-cycle correction. The desk confirmed no downstream impact.
 
-- 2026-05-17: Officer on duty logged a routine observation for the reconciliation batch during review window 1153. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-17: The controls team recorded a routine observation. A typo in a reference record was corrected before the run started. Filed for the record.
 
-- 2026-05-22: Controls review of the submission gateway in window 1155 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-22: The exceptions queue owner opened a query on a routine observation. Two accounts showed a same-day transfer the export had not yet picked up. Nothing here bears on engine behaviour.
 
-- 2026-05-20: Controls review of the venue adaptor in window 1156 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-05-20: The platform team reviewed a routine observation. Two accounts showed a same-day transfer the export had not yet picked up. No follow-up was requested.
 
-- 2026-05-16: Compliance stand-up recorded a routine note against the confirmations feed for window 1158. The resubmission backlog was cleared with no amendment raised.
+- 2026-05-16: The duty analyst raised and closed a routine observation. The downstream vendor confirmed receipt inside the agreed window. Closed with no parameter change.
 
-- 2026-05-07: Compliance stand-up recorded a routine note against the submission gateway for window 1159. The resubmission backlog was cleared with no amendment raised.
+- 2026-05-07: An on-call engineer reviewed a routine observation. One record appeared twice in the export after a mid-cycle correction. No follow-up was requested.
 
-- 2026-05-15: Officer on duty logged a routine observation for the reconciliation batch during review window 1162. Rejection-rate drift reviewed; no policy change requested.
+- 2026-05-15: A reviewer on shift filed a routine observation. The variance sat inside tolerance and no adjustment was raised.
 
-- 2026-06-23: Compliance stand-up recorded a routine note against the confirmations feed for window 1163. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-23: An on-call engineer logged a routine observation. Storage on the staging host was extended after the export outgrew its allocation. The thread was archived after review.
 
 > **Governance decision (2026-06-03 - #REG-7210)** Priya: Reporting policy baseline, read from /app/data/reporting_policy.json at that fixed absolute path. Any field the policy file omits keeps its baseline: notional_floor_usd = 1000000; deadline_business_days = 1; max_submissions = 2500; late_grace_days = 0.
 
-- 2026-06-16: Compliance stand-up recorded a routine note against the confirmations feed for window 1166. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-16: An on-call engineer reviewed a routine observation. The overnight window ran long behind an unrelated platform patch. The thread was archived after review.
 
-- 2026-06-10: Compliance stand-up recorded a routine note against the confirmations feed for window 1167. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-10: A stand-up note signed off a routine observation. A duplicate order was cancelled at source and never reached the run. Closed with no parameter change.
 
-- 2026-06-17: Officer on duty logged a routine observation for the reference-data service during review window 1170. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-17: The reconciliation desk raised and closed a routine observation. Late inputs arrived from one feed and were loaded before the cut. The desk confirmed no downstream impact.
 
-- 2026-06-15: Controls review of the reconciliation batch in window 1173 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-15: A reviewer on shift carried forward a routine observation. One record appeared twice in the export after a mid-cycle correction. Filed for the record.
 
-- 2026-06-19: Compliance stand-up recorded a routine note against the reconciliation batch for window 1176. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-19: A stand-up note carried forward a routine observation. The variance sat inside tolerance and no adjustment was raised. Closed with no parameter change.
 
-- 2026-06-06: Officer on duty logged a routine observation for the reference-data service during review window 1178. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-06: A stand-up note opened a query on a routine observation. The variance sat inside tolerance and no adjustment was raised.
 
-- 2026-06-22: Controls review of the reconciliation batch in window 1179 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-22: The platform team noted a routine observation. A batch retried once after a transient timeout and completed on the second pass. Filed for the record.
 
-- 2026-06-11: Controls review of the confirmations feed in window 1182 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-11: A stand-up note recorded a routine observation. Storage on the staging host was extended after the export outgrew its allocation.
 
-- 2026-06-01: Controls review of the venue adaptor in window 1185 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-01: A weekly review recorded a routine observation. The overnight window ran long behind an unrelated platform patch. No follow-up was requested.
 
-- 2026-06-06: Compliance stand-up recorded a routine note against the reconciliation batch for window 1187. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-06: The controls team opened a query on a routine observation. One record appeared twice in the export after a mid-cycle correction.
 
-- 2026-06-16: Controls review of the venue adaptor in window 1188 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-16: The operations desk reviewed a routine observation. Storage on the staging host was extended after the export outgrew its allocation. Closed with no parameter change.
 
-- 2026-06-13: Officer on duty logged a routine observation for the confirmations feed during review window 1191. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-13: An on-call engineer recorded a routine observation. An operator asked whether a credit had posted; it had, in the preceding period. Nothing here bears on engine behaviour.
 
-- 2026-06-07: Surveillance desk noted rejected acknowledgements from the reference-data service in window 1193. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-06-07: A reviewer on shift logged a routine observation. A duplicate order was cancelled at source and never reached the run. The thread was archived after review.
 
-- 2026-06-24: Officer on duty logged a routine observation for the submission gateway during review window 1196. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-24: The exceptions queue owner spot-checked a routine observation. Two accounts showed a same-day transfer the export had not yet picked up.
 
-- 2026-06-11: Compliance stand-up recorded a routine note against the reference-data service for window 1198. The resubmission backlog was cleared with no amendment raised.
+- 2026-06-11: The duty analyst logged a routine observation. The downstream vendor confirmed receipt inside the agreed window. Closed with no parameter change.
 
-- 2026-06-04: Controls review of the reference-data service in window 1201 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-04: The reconciliation desk signed off a routine observation. The overnight window ran long behind an unrelated platform patch. The thread was archived after review.
 
-- 2026-06-22: Officer on duty logged a routine observation for the confirmations feed during review window 1204. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-22: A stand-up note noted a routine observation. Storage on the staging host was extended after the export outgrew its allocation. No action was carried forward.
 
-- 2026-06-15: Surveillance desk noted rejected acknowledgements from the reconciliation batch in window 1207. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-06-15: A shift handover opened a query on a routine observation. Two accounts showed a same-day transfer the export had not yet picked up. Closed with no parameter change.
 
-- 2026-06-20: Surveillance desk noted rejected acknowledgements from the confirmations feed in window 1210. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-06-20: The platform team reviewed a routine observation. The variance sat inside tolerance and no adjustment was raised.
 
-- 2026-06-14: Controls review of the submission gateway in window 1211 closed with no action; the standing thresholds were reconfirmed as they are.
+- 2026-06-14: The reconciliation desk opened a query on a routine observation. A typo in a reference record was corrected before the run started.
 
-- 2026-06-09: Surveillance desk noted rejected acknowledgements from the venue adaptor in window 1212. Raised with the venue owner; the reporting parameters were not touched.
+- 2026-06-09: The operations desk reviewed a routine observation. A question raised on the floor was withdrawn once the entry was reread. No action was carried forward.
 
-- 2026-06-24: Officer on duty logged a routine observation for the venue adaptor during review window 1214. Rejection-rate drift reviewed; no policy change requested.
+- 2026-06-24: The controls team reviewed a routine observation. A typo in a reference record was corrected before the run started.

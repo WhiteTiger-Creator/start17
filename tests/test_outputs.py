@@ -371,6 +371,32 @@ def test_delegation_moves_the_filer_but_not_the_eligibility():
     assert [l["filer_lei"] for l in lines] == ["LEI-CP-C"]
 
 
+def test_a_delegation_is_not_followed_past_the_first_delegate():
+    """#REG-7192: the chain is not walked to its end.
+
+    A delegation is the arrangement between one reporting party and one delegate,
+    so a delegate that has itself delegated is no concern of this line. The rule
+    was implicit -- the engine resolved one hop and the graded register happens to
+    contain six parties whose delegate has also delegated, pinning thirty-two
+    report lines to the first delegate -- so a solution that followed the chain to
+    its end failed those lines with nothing in the log to explain why.
+    """
+    _, _, lines, _ = _probe(
+        [_booking("TR-1", rp="CP-A")],
+        [_party("CP-A", delegated="CP-B"), _party("CP-B", delegated="CP-C"),
+         _party("CP-C")])
+    assert [l["filer_lei"] for l in lines] == ["LEI-CP-B"], (
+        "the filer is the reporting party's own delegate; following the chain to "
+        "CP-C is the reading #REG-7192 now rules out")
+
+    # and the graded register really does contain such chains, so the rule is
+    # load-bearing on the graded run rather than only in this crafted world
+    register = {r["party_id"]: r for r in _load_json(DATA / "counterparty_register.json")}
+    chained = [p for p, r in register.items()
+               if r["delegated_to"] and register.get(r["delegated_to"], {}).get("delegated_to")]
+    assert chained, "no party in the register delegates to a delegator"
+
+
 def test_the_cap_queues_the_tail_in_deadline_order():
     """Submissions are taken earliest deadline first and the rest queued."""
     _, _, lines, queue = _probe(

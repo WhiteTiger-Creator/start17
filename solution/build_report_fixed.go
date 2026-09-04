@@ -6,6 +6,7 @@
 package main
 
 import (
+	"path/filepath"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -255,6 +256,15 @@ func main() {
 	if err := os.MkdirAll(*outputDir, 0o755); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
+	}
+	// The run leaves the output directory holding the three contracted files and
+	// nothing else, so anything an earlier run left there is cleared first. The
+	// CONTENTS go and the directory itself stays: the run does not own the path it
+	// is given, and under an unprivileged uid removing it would be refused outright.
+	if entries, err := os.ReadDir(*outputDir); err == nil {
+		for _, e := range entries {
+			os.RemoveAll(filepath.Join(*outputDir, e.Name()))
+		}
 	}
 	summary := map[string]any{
 		"schema_version":            "reg-report-v1",

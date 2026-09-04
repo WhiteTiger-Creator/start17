@@ -39888,5 +39888,29 @@
     "posted_by": "ref-migration",
     "seq": 5067,
     "trade_key": "TR-006225#1"
+  },
+  {
+    "field": "venue",
+    "kind": "amend",
+    "posted_by": "ref-migration",
+    "seq": 5316,
+    "trade_key": "TR-009900#1",
+    "value": "otc"
+  },
+  {
+    "field": "",
+    "kind": "withdraw",
+    "posted_by": "ref-migration",
+    "seq": 5317,
+    "trade_key": "TR-009900#1",
+    "value": ""
+  },
+  {
+    "field": "",
+    "kind": "reinstate",
+    "posted_by": "ref-migration",
+    "seq": 5318,
+    "trade_key": "TR-009900#1",
+    "value": ""
   }
 ]

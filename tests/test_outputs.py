@@ -173,8 +173,10 @@ def test_the_engine_is_one_file_with_no_sibling_source():
     assert siblings == [], (
         "the engine is one package main in one file compiled on its own, so these "
         f"sibling sources never reach the build: {siblings}")
-    stray = sorted(q.name for q in WORKFLOW_PATH.parent.glob("go.*"))
-    assert stray == [], f"the build takes the one file, not a module: {stray}"
+    # No ban on a go.mod or go.sum sitting here: _build copies the source to a
+    # temporary directory and compiles it there, so nothing in /app/workflow can
+    # join the build in the first place. Failing a file that changes nothing
+    # would reject work the instruction does not forbid.
     _build(WORKFLOW_PATH)
 
 
@@ -460,6 +462,74 @@ def test_the_cap_queues_the_tail_in_deadline_order():
 # --------------------------------------------------------------------------
 # Contract, budget, determinism and isolation
 # --------------------------------------------------------------------------
+def test_stale_contents_are_cleared_from_the_output_directory():
+    """instruction.md says a run leaves the directory holding those three and nothing else.
+
+    Nothing reached this: every other run here is handed a directory the suite
+    has just created, so a run that wrote its three files over whatever it found
+    satisfied all of them, and the reference never cleared either. The contents
+    must go and the directory itself must stay -- the run does not own the path,
+    and under the candidate uid removing it would be refused outright.
+    """
+    binary = _build(WORKFLOW_PATH)
+    _publish_inputs()
+    work = _candidate_dir()
+    out_dir = work / "given-output"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    os.chmod(out_dir, 0o777)
+    stale = out_dir / "report_lines.json"
+    stale.write_text("[]\n", encoding="utf-8")
+    os.chmod(stale, 0o666)
+    junk = out_dir / "left_behind.json"
+    junk.write_text('{"stale": true}\n', encoding="utf-8")
+    os.chmod(junk, 0o666)
+    nested = out_dir / "scratch"
+    nested.mkdir()
+    (nested / "inner.json").write_text("{}\n", encoding="utf-8")
+    os.chmod(nested / "inner.json", 0o666)
+    os.chmod(nested, 0o777)
+    before = out_dir.stat()
+
+    result = _run_agent([binary, "--output-dir", str(out_dir)], cwd=work)
+    assert result.returncode == 0, (
+        f"the run exited {result.returncode}\n"
+        f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
+    assert sorted(q.name for q in out_dir.iterdir()) == [
+        "exception_queue.jsonl", "report_lines.json", "summary.json"], (
+        "a stale entry survived into the output directory")
+    after = out_dir.stat()
+    assert (after.st_ino, after.st_dev) == (before.st_ino, before.st_dev), (
+        "the output directory was removed and recreated rather than emptied; the "
+        "run does not own the path it writes into")
+    # and the run is the graded one, not three empty files that happen to be named right
+    assert _load_json(out_dir / "summary.json") == FIXTURE["primary"]["summary"]
+
+
+def test_a_change_naming_a_booking_the_snapshot_never_carried_is_ignored():
+    """#REG-7170 says such a change is ignored, and no shipped data reached the rule.
+
+    Every trade key the journal named was already in the snapshot, so a replay
+    that INSERTED an unknown booking rebuilt the same ledger and matched the
+    sealed digest. The journal now carries an amend, a withdraw and a reinstate
+    against a booking the snapshot never held; all three must contribute nothing.
+    """
+    journal = _load_json(JOURNAL_PATH)
+    snapshot = {(r["trade_id"], r["version"]) for r in _load_json(SNAPSHOT_PATH)}
+    unknown = [c for c in journal
+               if (c["trade_key"].split("#")[0],
+                   int(c["trade_key"].split("#")[1])) not in snapshot]
+    assert unknown, "the journal names no booking the snapshot lacks, so this proves nothing"
+    assert {c["kind"] for c in unknown} == {"amend", "withdraw", "reinstate"}, (
+        "the unknown booking is not exercised by all three change kinds")
+
+    ghosts = {c["trade_key"].split("#")[0] for c in unknown}
+    recovered = {(r["trade_id"], r["version"]) for r in _load_json(LEDGER_PATH)}
+    for trade_id in sorted(ghosts):
+        assert not any(t == trade_id for t, _ in recovered), (
+            f"{trade_id} reached the rebuilt ledger, but the snapshot never "
+            "carried it and #REG-7170 ignores a change that names it")
+
+
 def test_policy_path_actually_influences_the_output():
     """The policy is resolved from its fixed path, not inlined as constants."""
     saved = (DATA / "reporting_policy.json").read_text(encoding="utf-8")
@@ -472,7 +542,27 @@ def test_policy_path_actually_influences_the_output():
         assert summary["effective_deadline_days"] == 3
         assert summary["effective_max_submissions"] == 40
         assert summary["effective_late_grace"] == 2
+        # the grace term has to bite, not just be echoed back. #REG-7190 makes a
+        # submission late only past the deadline PLUS late_grace_days, and the
+        # shipped policy carries a grace of 0, so nothing else in this suite
+        # reaches it: dropping the term entirely left every other test green.
+        graced = summary["late_count"]
         assert summary != FIXTURE["primary"]["summary"]
+    finally:
+        (DATA / "reporting_policy.json").write_text(saved, encoding="utf-8")
+
+    saved = (DATA / "reporting_policy.json").read_text(encoding="utf-8")
+    try:
+        # the same policy with the grace removed and nothing else changed
+        _write_json(DATA / "reporting_policy.json", {"default": {
+            "notional_floor_usd": 5_000_000, "deadline_business_days": 3,
+            "max_submissions": 40, "late_grace_days": 0}})
+        _, ungraced_summary, _, _ = _run_pipeline()
+        assert ungraced_summary["effective_late_grace"] == 0
+        assert ungraced_summary["late_count"] > graced, (
+            "two days of grace excused no submission, so late_grace_days is not "
+            f"reaching the lateness test: {graced} late with grace 2, "
+            f"{ungraced_summary['late_count']} with grace 0")
     finally:
         (DATA / "reporting_policy.json").write_text(saved, encoding="utf-8")
 

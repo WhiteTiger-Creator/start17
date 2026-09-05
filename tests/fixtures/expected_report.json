@@ -1,43 +1,43 @@
 {
   "alternate": {
-    "lines_digest": "47b14e635ea5eda296322d163d9cea12df2cb2dbb369d86b13e1dd0dacfe3989",
-    "queue_digest": "ea89d4d704a89f7808fc593b4b1d2a01db53ed6b1bf0711a5de8fb1cf82f09c1",
+    "lines_digest": "72d67a93677ee1b7a937ef8fc40d781ed1fcf7522072bafc58e4c881b8332392",
+    "queue_digest": "e4ff566c005761372c3b0d2037845758cd55cd7d6b807469d709c4c74f76a567",
     "summary": {
-      "booking_count": 9887,
+      "booking_count": 9888,
       "effective_deadline_days": 1,
       "effective_late_grace": 0,
       "effective_max_submissions": 2500,
       "effective_notional_floor": 1000000,
-      "eligible_count": 3599,
-      "exception_count": 1099,
+      "eligible_count": 3600,
+      "exception_count": 1100,
       "late_count": 1030,
       "reported_count": 2500,
-      "reported_usd_notional": 131120398643,
+      "reported_usd_notional": 131124484771,
       "schema_version": "reg-report-v1",
-      "trade_count": 8343
+      "trade_count": 8344
     }
   },
   "broken_engine_sha256": "27f8912cbfdb3a5cb510c986580b09517246e3054880877c71bb236ad4891aca",
   "primary": {
-    "lines_digest": "2884a4c3264e0f0fb81dec7c994a59585ddbeb530f681175fa7d4afadd015cc4",
-    "queue_digest": "9ad9448db77e5bdb99db611c2df8f38aeeaf2eb35191b925bb2d5bbe9df3becc",
+    "lines_digest": "86d119761cb11ec95424cb6ccd317bf4f8b20bbc4d34884970772d4400d7be03",
+    "queue_digest": "0fd929472d98fa7c0e4bd67abcd9d1580f6ae8178e4af6c60d0536f411a8f6f8",
     "summary": {
-      "booking_count": 10510,
+      "booking_count": 10511,
       "effective_deadline_days": 1,
       "effective_late_grace": 0,
       "effective_max_submissions": 2500,
       "effective_notional_floor": 1000000,
-      "eligible_count": 3790,
-      "exception_count": 1290,
+      "eligible_count": 3791,
+      "exception_count": 1291,
       "late_count": 955,
       "reported_count": 2500,
-      "reported_usd_notional": 130310570257,
+      "reported_usd_notional": 130284386546,
       "schema_version": "reg-report-v1",
-      "trade_count": 8788
+      "trade_count": 8789
     }
   },
-  "recovered_booking_count": 10510,
-  "recovered_ledger_digest": "e0ab7047685883a26caac4267d426ea7679a803e8299f334a813545800b63116",
-  "rule_sources_digest": "c140145349c065e5a42237688197428793016e9cc43f8236be9dceb678e24b3e",
+  "recovered_booking_count": 10511,
+  "recovered_ledger_digest": "2ea3ef548d4794b24fdc089614675ab17d24caf95701a7e8d7799353ea7a8097",
+  "rule_sources_digest": "5b6034543a38c3100c46d004983bb75cf72bca46a76a341143232a198edf462a",
   "shipped_truncated_digest": "23945f03f252162847f4b74da45287cca1ebafbc66b404f0f889c035ebd8b301"
 }

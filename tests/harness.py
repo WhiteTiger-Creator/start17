@@ -230,6 +230,38 @@ def _candidate_dir() -> Path:
     return d
 
 
+def _assert_agent_owned_dir(path: Path) -> Path:
+    """Refuse a path the verifier is about to clear unless the agent really owns it.
+
+    The default output directory sits on an agent-writable path and the verifier
+    empties it as ROOT. Nothing stopped the agent replacing /app/output with a
+    symlink: one pointing at /tests/fixtures had the clearing step delete the
+    sealed goldens out from under the run. It ends in a failure rather than a
+    pass, so it was never a route to reward, but a verifier that can be made to
+    destroy its own ground truth is a verifier that reports the wrong reason.
+
+    The path itself must not be a link, no component of it may be, and what it
+    resolves to must stay inside /app. lstat rather than stat throughout: stat
+    follows the link and would report on the target.
+    """
+    root = Path("/app").resolve()
+    if path.is_symlink():
+        raise AssertionError(
+            f"{path} is a symlink to {os.readlink(path)}; the run does not own the "
+            "path it writes into and may not replace it with a link")
+    for parent in path.parents:
+        if parent == Path("/"):
+            break
+        if parent.is_symlink():
+            raise AssertionError(f"{parent}, on the way to {path}, is a symlink")
+    resolved = path.resolve()
+    if resolved != path and not str(resolved).startswith(str(root) + os.sep):
+        raise AssertionError(f"{path} resolves to {resolved}, which is outside /app")
+    if not str(resolved).startswith(str(root) + os.sep):
+        raise AssertionError(f"{path} lies outside /app")
+    return resolved
+
+
 def _publish_inputs() -> None:
     """Open read access on the agent-produced inputs before privileges drop.
 
@@ -384,6 +416,7 @@ __all__ = [
     "_write_json",
     "_build",
     "_candidate_dir",
+    "_assert_agent_owned_dir",
     "_publish_inputs",
     "_run_agent",
     "_run_pipeline",

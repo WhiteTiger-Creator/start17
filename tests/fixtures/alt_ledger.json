@@ -128529,5 +128529,18 @@
     "trade_id": "TR-009000",
     "venue": "sef",
     "version": 3
+  },
+  {
+    "asset_class": "rates",
+    "confirmed": true,
+    "currency": "USD",
+    "notional": 6100000,
+    "other_party": "CP-9002",
+    "reporting_party": "CP-0001",
+    "submitted_day": 56,
+    "trade_day": 55,
+    "trade_id": "TR-009911",
+    "venue": "otc",
+    "version": 1
   }
 ]

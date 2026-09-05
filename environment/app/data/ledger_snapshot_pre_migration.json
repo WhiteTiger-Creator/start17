@@ -140333,5 +140333,18 @@
     "trade_id": "TR-009000",
     "venue": "mtf",
     "version": 3
+  },
+  {
+    "asset_class": "rates",
+    "confirmed": true,
+    "currency": "USD",
+    "notional": 8400000,
+    "other_party": "CP-9001",
+    "reporting_party": "CP-0001",
+    "submitted_day": 41,
+    "trade_day": 40,
+    "trade_id": "TR-009910",
+    "venue": "otc",
+    "version": 1
   }
 ]

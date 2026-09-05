@@ -358,6 +358,22 @@ def test_obligation_follows_the_reporting_side_alone():
     assert [l["trade_id"] for l in lines] == ["TR-1"]
 
 
+def test_a_trade_files_even_where_the_register_does_not_carry_the_other_side():
+    """The other side's entry is never consulted, so its absence changes nothing.
+
+    #REG-7186 has eligibility follow the REPORTING side alone, and the shipped
+    engine reads the other party out of the register and drops the trade where it
+    is missing. Every other_party in both ledgers sat in the register, so that
+    lookup could be left in and nothing here noticed: the whole clause was dead.
+    Here CP-B appears on the booking and nowhere in the register.
+    """
+    _, summary, lines, _ = _probe(
+        [_booking("TR-1", rp="CP-A", op="CP-B")], [_party("CP-A", in_scope=True)])
+    assert summary["eligible_count"] == 1, (
+        "the trade was dropped because the register does not carry its other side")
+    assert [l["trade_id"] for l in lines] == ["TR-1"]
+
+
 def test_a_party_below_the_clearing_threshold_files_nothing():
     """Classification alone can put the reporting side out of scope."""
     _, summary, lines, _ = _probe(
@@ -625,6 +641,22 @@ def test_run_is_idempotent(primary_outputs):
     assert s2 == summary and _digest(l2) == _digest(lines) and _digest(q2) == _digest(queue)
 
 
+def test_the_default_output_path_is_a_directory_the_run_does_not_own():
+    """instruction.md says the run writes into a path it does not own.
+
+    Replacing /app/output with a link to somewhere else is not writing into it,
+    and it aims every clearing step -- the engine's own and the verifier's --
+    at whatever the link names. Checked before anything empties the path.
+    """
+    default_out = Path("/app/output")
+    assert not default_out.is_symlink(), (
+        f"/app/output is a symlink to {os.readlink(default_out)}")
+    assert default_out.is_dir(), "/app/output is not a directory"
+    assert _assert_agent_owned_dir(default_out) == default_out.resolve()
+    for q in default_out.rglob("*"):
+        assert not q.is_symlink(), f"{q} under /app/output is a symlink"
+
+
 def test_no_argument_run_writes_to_the_documented_defaults(primary_outputs):
     """With no flags at all the program reads and writes its documented defaults.
 
@@ -634,6 +666,10 @@ def test_no_argument_run_writes_to_the_documented_defaults(primary_outputs):
     binary = _build(WORKFLOW_PATH)
     _publish_inputs()
     default_out = Path("/app/output")
+    # Root is about to empty this. It is an agent-writable path, so refuse it
+    # outright unless it is a real directory inside /app: a symlink planted here
+    # pointed the clearing step at /tests/fixtures and deleted the sealed goldens.
+    _assert_agent_owned_dir(default_out)
     # the directory ships with the image; emptying it is what this test needs, but
     # its mode belongs to the environment and is put back either way
     mode = default_out.stat().st_mode & 0o7777 if default_out.exists() else 0o777

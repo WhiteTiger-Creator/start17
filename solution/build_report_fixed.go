@@ -6,11 +6,12 @@
 package main
 
 import (
-	"path/filepath"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"math/bits"
 	"os"
+	"path/filepath"
 	"sort"
 )
 
@@ -129,6 +130,17 @@ func policyValue(pol policy, field string, baseline int64) int64 {
 	return baseline
 }
 
+
+// usdOf carries a notional into whole US dollars at a micro-dollar rate without
+// letting the intermediate wrap. Both figures are non-negative under the
+// contract, so the unsigned 128-bit path is exact and the quotient fits an
+// int64 as #REG-7188 states.
+func usdOf(notional, microUSDPerUnit int64) int64 {
+	hi, lo := bits.Mul64(uint64(notional), uint64(microUSDPerUnit))
+	quo, _ := bits.Div64(hi, lo, 1_000_000)
+	return int64(quo)
+}
+
 func main() {
 	input := flag.String("input", "/app/data/transaction_ledger.json", "transaction ledger")
 	outputDir := flag.String("output-dir", "/app/output", "output directory")
@@ -205,8 +217,15 @@ func main() {
 			continue
 		}
 		// #REG-7188: the notional is carried into USD at the table's rate and floored
-		// to whole dollars before it meets the threshold.
-		usd := (t.Notional * rate) / 1_000_000
+		// to whole dollars before it meets the threshold, and the conversion is the
+		// ARITHMETIC value of notional*rate/1e6 rather than whatever a 64-bit
+		// register holds. The book carries notionals whose product with the rate
+		// passes the int64 ceiling while the dollar figure sits far inside it, so the
+		// multiply is carried at 128 bits and the divide comes back down: bits.Mul64
+		// gives the full product as a high/low pair and bits.Div64 divides it,
+		// panicking only where the quotient would not fit, which #REG-7188 says it
+		// always does.
+		usd := usdOf(t.Notional, rate)
 		if usd < floorUSD {
 			continue
 		}

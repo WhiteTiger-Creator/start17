@@ -1,43 +1,43 @@
 {
   "alternate": {
-    "lines_digest": "72d67a93677ee1b7a937ef8fc40d781ed1fcf7522072bafc58e4c881b8332392",
-    "queue_digest": "e4ff566c005761372c3b0d2037845758cd55cd7d6b807469d709c4c74f76a567",
+    "lines_digest": "79ec0ba3b6362e27f6189809428d519659c9e25cd2bc74713141ae3ae998039f",
+    "queue_digest": "3b22c7cc8649dab64ce3ad85b5b1c51fe4325a1e2b27a86a4501c5e403482e46",
     "summary": {
-      "booking_count": 9888,
+      "booking_count": 9890,
       "effective_deadline_days": 1,
       "effective_late_grace": 0,
       "effective_max_submissions": 2500,
       "effective_notional_floor": 1000000,
-      "eligible_count": 3600,
-      "exception_count": 1100,
-      "late_count": 1030,
+      "eligible_count": 3602,
+      "exception_count": 1102,
+      "late_count": 1031,
       "reported_count": 2500,
-      "reported_usd_notional": 131124484771,
+      "reported_usd_notional": 20149388015685,
       "schema_version": "reg-report-v1",
-      "trade_count": 8344
+      "trade_count": 8346
     }
   },
   "broken_engine_sha256": "27f8912cbfdb3a5cb510c986580b09517246e3054880877c71bb236ad4891aca",
   "primary": {
-    "lines_digest": "86d119761cb11ec95424cb6ccd317bf4f8b20bbc4d34884970772d4400d7be03",
-    "queue_digest": "0fd929472d98fa7c0e4bd67abcd9d1580f6ae8178e4af6c60d0536f411a8f6f8",
+    "lines_digest": "80bb3ee04a7d7eef2474773df4a5c6530907b2497a8766fddf5e38f0f75fe9d4",
+    "queue_digest": "705d38198f0c98328b38da2ffd9ba19289b7be5f55aca74729c330dcd9928944",
     "summary": {
-      "booking_count": 10511,
+      "booking_count": 10513,
       "effective_deadline_days": 1,
       "effective_late_grace": 0,
       "effective_max_submissions": 2500,
       "effective_notional_floor": 1000000,
-      "eligible_count": 3791,
-      "exception_count": 1291,
+      "eligible_count": 3793,
+      "exception_count": 1293,
       "late_count": 955,
       "reported_count": 2500,
-      "reported_usd_notional": 130284386546,
+      "reported_usd_notional": 19513581371503,
       "schema_version": "reg-report-v1",
-      "trade_count": 8789
+      "trade_count": 8791
     }
   },
-  "recovered_booking_count": 10511,
-  "recovered_ledger_digest": "2ea3ef548d4794b24fdc089614675ab17d24caf95701a7e8d7799353ea7a8097",
-  "rule_sources_digest": "2cb28ea73ba759559dcd8b38a8731e837e887cda4691f6f6b362113c8ba369e6",
+  "recovered_booking_count": 10513,
+  "recovered_ledger_digest": "b99c8b9ca3fe3bea284a5a1c9cf9fb1510405da78a1e414f494608c966f97c88",
+  "rule_sources_digest": "c5a8b42734989ca7ed515b383a2073a0dbb4ecb38dc77927a0fc1b922af51bf2",
   "shipped_truncated_digest": "23945f03f252162847f4b74da45287cca1ebafbc66b404f0f889c035ebd8b301"
 }

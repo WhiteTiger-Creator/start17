@@ -402,6 +402,7 @@ __all__ = [
     "os",
     "re",
     "shutil",
+    "stat",
     "signal",
     "subprocess",
     "sys",

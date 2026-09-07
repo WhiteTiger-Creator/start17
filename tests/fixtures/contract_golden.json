@@ -19,6 +19,7 @@
         "version",
         "reason"
       ],
+      "fields_are_exclusive": "the listed fields are the whole of the record: it carries these and no others, the same way the output directory carries exactly the three named files",
       "path": "/app/output/exception_queue.jsonl",
       "reasons": [
         "over_cap",
@@ -41,6 +42,7 @@
         "submitted_day",
         "late"
       ],
+      "fields_are_exclusive": "the listed fields are the whole of the record: it carries these and no others, the same way the output directory carries exactly the three named files",
       "path": "/app/output/report_lines.json",
       "serialisation": "JSON array, two-space indent, trailing newline",
       "sort": "ascending by deadline_day, then trade_id"
@@ -64,6 +66,7 @@
         "schema_version": "string",
         "trade_count": "integer"
       },
+      "fields_are_exclusive": "the listed fields are the whole of the record: it carries these and no others, the same way the output directory carries exactly the three named files",
       "path": "/app/output/summary.json",
       "required_fields": [
         "schema_version",
@@ -88,6 +91,7 @@
   "reconciled_inputs": {
     "transaction_ledger": {
       "container": "array",
+      "fields_are_exclusive": "the listed fields are the whole of the record: it carries these and no others, the same way the output directory carries exactly the three named files",
       "path": "/app/data/transaction_ledger.json",
       "record_fields": [
         "trade_id",
@@ -109,6 +113,7 @@
   "runtime_budget_seconds": 90,
   "units": {
     "days": "integer offsets on the regulatory day grid",
-    "usd_notional": "whole US dollars"
+    "notional": "a non-negative integer in the trade's own currency. Its conversion to usd_notional is exact: notional times the rate table's micro_usd_per_unit divided by a million, floored. The product of those two may exceed what a signed 64-bit integer holds even though every usd_notional the conversion yields sits inside one, so the intermediate cannot be carried in 64 bits",
+    "usd_notional": "whole US dollars; every usd_notional and their reported sum fit a signed 64-bit integer"
   }
 }

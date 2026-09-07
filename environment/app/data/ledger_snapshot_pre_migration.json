@@ -140346,5 +140346,31 @@
     "trade_id": "TR-009910",
     "venue": "otc",
     "version": 1
+  },
+  {
+    "asset_class": "rates",
+    "confirmed": true,
+    "currency": "GBP",
+    "notional": 8000000000000,
+    "other_party": "CP-0002",
+    "reporting_party": "CP-0001",
+    "submitted_day": 121,
+    "trade_day": 120,
+    "trade_id": "TR-009920",
+    "venue": "otc",
+    "version": 1
+  },
+  {
+    "asset_class": "credit",
+    "confirmed": true,
+    "currency": "USD",
+    "notional": 9223372036855,
+    "other_party": "CP-0008",
+    "reporting_party": "CP-0005",
+    "submitted_day": 141,
+    "trade_day": 140,
+    "trade_id": "TR-009921",
+    "venue": "mtf",
+    "version": 1
   }
 ]

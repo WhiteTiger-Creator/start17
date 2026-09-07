@@ -128,6 +128,52 @@ def test_output_dir_contains_exactly_three_files(primary_outputs):
         "exception_queue.jsonl", "report_lines.json", "summary.json"]
 
 
+_ABSENT = object()
+
+
+def _writable_roots(work: Path) -> list:
+    """Every directory the unprivileged run could drop a file into.
+
+    Discovered rather than enumerated: the caller's work area and the HOME it is
+    handed, the agent-visible tree under /app, every writable tmpfs the mount
+    table names, and every world-writable directory within two levels of the
+    root. /proc and /sys carry no candidate writes and are expensive to walk;
+    /dev is world-writable in an ordinary container, so taking the whole device
+    tree as one root would swallow /dev/shm into it and follow symlinks, and its
+    tmpfs mounts are named here and by the mount table instead.
+    """
+    roots = {work, Path(CHILD_ENV["HOME"]), Path("/tmp"), Path("/var/tmp"),
+             Path("/dev/shm"), Path("/run"), Path("/var/lock"), APP}
+    try:
+        for line in Path("/proc/mounts").read_text(encoding="utf-8").splitlines():
+            parts = line.split()
+            if len(parts) >= 3 and parts[2] in ("tmpfs", "ramfs"):
+                roots.add(Path(parts[1]))
+    except OSError:
+        pass
+    for depth_one in Path("/").iterdir():
+        if str(depth_one) in ("/proc", "/sys", "/dev") or depth_one.is_symlink() \
+                or not depth_one.is_dir():
+            continue
+        try:
+            entries = [depth_one] + [q for q in depth_one.iterdir()
+                                     if q.is_dir() and not q.is_symlink()]
+        except OSError:
+            continue
+        for entry in entries:
+            try:
+                if entry.stat().st_mode & stat.S_IWOTH:
+                    roots.add(entry)
+            except OSError:
+                continue
+    ordered = sorted(roots, key=lambda q: len(str(q)))
+    kept: list = []
+    for root in ordered:
+        if not any(str(root).startswith(str(k) + "/") for k in kept):
+            kept.append(root)
+    return kept
+
+
 def test_a_run_writes_nothing_outside_its_output_directory():
     """instruction.md scopes a run to its --output-dir, and nothing checked it.
 
@@ -147,22 +193,47 @@ def test_a_run_writes_nothing_outside_its_output_directory():
     # HOME=/candidate-work and that directory is world-writable, so a scratch
     # file dropped there -- or in /tmp -- left the output directory clean while
     # the run had still written outside it. Every place it can write is swept.
-    watched = [work, Path(CHILD_ENV["HOME"]), Path("/tmp"), Path("/var/tmp")]
+    # Compiled BEFORE the snapshot is taken. _build makes a temporary directory
+    # under /tmp and fills the Go build cache there, so on a cold cache -- this
+    # test run on its own, or first in a reordered run -- every one of those paths
+    # landed in the difference and read as a write by the graded run.
+    binary = _build(WORKFLOW_PATH)
+
+    # Naming a few directories was not enough: an ordinary container mounts a
+    # writable tmpfs at /dev/shm, which is under none of them, so a run that wrote
+    # there was outside its output directory and outside the sweep. The watched set
+    # is discovered instead -- the named directories, every writable tmpfs the
+    # mount table carries, and every world-writable directory within two levels of
+    # the root -- and each file is recorded with its size and modification time,
+    # since a run that rewrites the SAME scratch path on every run has already
+    # created it by the time this test snapshots and a set of paths differs by
+    # nothing.
+    watched = _writable_roots(work)
+    if Path("/dev/shm").is_dir():
+        assert any(Path("/dev/shm") == root or str(Path("/dev/shm")).startswith(
+            str(root) + "/") for root in watched), (
+            "the writable tmpfs at /dev/shm is watched by nothing here")
 
     def sweep():
-        seen = set()
+        seen = {}
         for root in watched:
-            if root.exists():
-                seen.update(str(q) for q in root.rglob("*"))
+            if not root.exists():
+                continue
+            for q in [root, *root.rglob("*")]:
+                try:
+                    st = q.stat()
+                except OSError:
+                    continue
+                seen[str(q)] = (st.st_mtime_ns, st.st_size) if not q.is_dir() else None
         return seen
 
     before = sweep()
-    binary = _build(WORKFLOW_PATH)
     result = _run_agent([binary, "--input", str(staged), "--output-dir", str(out_dir)], cwd=work)
     assert result.returncode == 0, (
         f"the run exited {result.returncode}\n"
         f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
-    written = sorted(sweep() - before)
+    after = sweep()
+    written = sorted(q for q, v in after.items() if before.get(q, _ABSENT) != v)
     expected = sorted(str(out_dir / n) for n in (
         "exception_queue.jsonl", "report_lines.json", "summary.json"))
     assert written == expected, (
@@ -207,6 +278,68 @@ def test_the_engine_is_one_file_with_no_sibling_source():
             f"{WORKFLOW_PATH.name} does not compile on its own, as instruction.md "
             f"requires. Other sources beside it, which never join this build: "
             f"{siblings}\n\n{exc}") from exc
+
+
+# The files this task ships under /app. Anything else the submission leaves
+# there is its own, and the engine must not need any of it at run time.
+SHIPPED_UNDER_APP = frozenset({
+    "data/counterparty_register.json", "data/fx_rates.json", "data/ledger_journal.json",
+    "data/ledger_snapshot_pre_migration.json", "data/reporting_calendar.json",
+    "data/reporting_policy.json", "data/transaction_ledger.json",
+    "docs/reporting_contract.json", "incident/compliance_governance_log.md",
+    "workflow/build_report.go", "workflow/.build_report.original.go",
+})
+
+
+def test_the_engine_does_the_work_itself_and_not_through_a_helper_it_left_behind():
+    """The compiled program is the engine, not a launcher for something else.
+
+    Compiling build_report.go alone proves only that it BUILDS alone. A small Go
+    program that execs an interpreter over a script the submission left beside it
+    -- /app/workflow/helper.py, say -- compiles alone perfectly well and then does
+    none of the work itself. The whole submission arrives as /app, so any such
+    helper has to be somewhere under /app to survive into this verifier: every
+    file there that the task did not ship is moved out of the tree for the length
+    of one run, and the run must still produce the graded artifacts. A submission
+    that reads the shipped inputs and computes is untouched by this; one that
+    hands the job to a file of its own has nothing left to hand it to.
+    """
+    binary = _build(WORKFLOW_PATH)
+    stash = Path(tempfile.mkdtemp(prefix="not_shipped_"))
+    moved = []
+    for path in sorted(APP.rglob("*")):
+        if path.is_dir() or APP / "output" in path.parents or path == APP / "output":
+            continue
+        rel = str(path.relative_to(APP))
+        if rel in SHIPPED_UNDER_APP:
+            continue
+        target = stash / rel.replace("/", "__")
+        shutil.move(str(path), str(target))
+        moved.append((path, target))
+    try:
+        _publish_inputs()
+        work = _candidate_dir()
+        out_dir = work / "output"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        os.chmod(out_dir, 0o777)
+        result = _run_agent([binary, "--output-dir", str(out_dir)], cwd=work)
+        assert result.returncode == 0, (
+            "with every file the submission added under /app moved aside, the run "
+            f"exited {result.returncode}; the engine is leaning on something it "
+            f"left behind\nstdout: {result.stdout[-2000:]}\n"
+            f"stderr: {result.stderr[-2000:]}")
+        assert _load_json(out_dir / "summary.json") == FIXTURE["primary"]["summary"], (
+            "the run produced a different report once its own files were moved "
+            "aside, so the work was not being done by the compiled engine")
+        assert _digest(_load_json(out_dir / "report_lines.json")) == \
+            FIXTURE["primary"]["lines_digest"]
+        assert _digest(_load_jsonl(out_dir / "exception_queue.jsonl")) == \
+            FIXTURE["primary"]["queue_digest"]
+    finally:
+        for path, target in moved:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(target), str(path))
+        shutil.rmtree(stash, ignore_errors=True)
 
 
 def test_the_artifacts_are_serialised_exactly_as_the_contract_states(primary_outputs):
@@ -401,6 +534,33 @@ def test_a_trade_files_even_where_the_register_does_not_carry_the_other_side():
     assert summary["eligible_count"] == 1, (
         "the trade was dropped because the register does not carry its other side")
     assert [l["trade_id"] for l in lines] == ["TR-1"]
+
+
+def test_the_usd_conversion_is_exact_where_the_product_passes_sixty_four_bits():
+    """#REG-7188 means the arithmetic value, not what a 64-bit register holds.
+
+    Both bookings carry a notional whose product with the rate passes the int64
+    ceiling while the dollar figure lands far inside it. A run that multiplies in
+    64 bits and divides afterwards wraps and reports a number that is not the
+    conversion at all -- negative, or small enough to fall under the floor and
+    drop the trade from the report entirely. The graded book carries this case
+    too, but a probe of its own says which rule broke.
+    """
+    ledger = [_booking("TR-BIG-1", notional=9_223_372_036_855),
+              _booking("TR-BIG-2", notional=9_500_000_000_000)]
+    _, summary, lines, queue = _probe(ledger, [_party("CP-A", in_scope=True),
+                                               _party("CP-B", in_scope=True)])
+    assert [(r["trade_id"], r["usd_notional"]) for r in lines] == [
+        ("TR-BIG-1", 9_223_372_036_855), ("TR-BIG-2", 9_500_000_000_000)], (
+        "a usd_notional was carried through a 64-bit multiply and wrapped; "
+        "#REG-7188 asks for the arithmetic value of notional*rate/1e6")
+    assert all(r["usd_notional"] > 0 for r in lines)
+    assert summary["reported_usd_notional"] == 9_223_372_036_855 + 9_500_000_000_000
+    assert queue == []
+    # the probe stages a rate of a million micro-dollars to the unit, so each
+    # product really does pass the ceiling and the case is not vacuous
+    assert 9_223_372_036_855 * 1_000_000 > 2 ** 63 - 1
+    assert 9_500_000_000_000 * 1_000_000 > 2 ** 63 - 1
 
 
 def test_a_party_below_the_clearing_threshold_files_nothing():
@@ -875,3 +1035,4 @@ def test_shipped_contract_matches_the_golden_copy():
     """
     shipped = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     assert shipped == json.loads(GOLDEN_CONTRACT_PATH.read_text(encoding="utf-8"))
+

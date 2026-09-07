@@ -200,6 +200,8 @@ How the reporting engine is *meant* to behave -- the recovery of the truncated t
 
 > **Governance decision (2026-06-03 - #REG-7210)** Priya: Reporting policy baseline, read from /app/data/reporting_policy.json at that fixed absolute path. Any field the policy file omits keeps its baseline: notional_floor_usd = 1000000; deadline_business_days = 1; max_submissions = 2500; late_grace_days = 0.
 
+> **Governance decision (2026-06-05 - #REG-7214)** Lena: Late accounting, final. `late_count` is taken over every ELIGIBLE booking, assessed at the moment its deadline is worked out and before anything else happens to it. A booking queued as `unconfirmed` counts if it was late, and so does one the submission cap displaces: both were late whether or not the report carries them, and the desk is measuring the basin's timeliness rather than the size of the file. It is NOT the number of report lines whose `late` flag is set, which is the same figure only where the cap binds on nothing and every booking is confirmed. Bookings that never became eligible -- out of scope, below the floor, no rate -- are not counted, having no deadline to be late against.
+
 - 2026-06-16: The change board recorded a low-risk change against the reporting stack. The archive job skipped a directory that had already been swept. Nothing here bears on engine behaviour.
 
 - 2026-06-10: A vendor advisory was circulated for information. A report was regenerated after someone opened it mid-write. Carried to the standing agenda and then dropped.

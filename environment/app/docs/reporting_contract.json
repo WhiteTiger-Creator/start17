@@ -47,6 +47,9 @@
     },
     "summary": {
       "container": "object",
+      "field_notes": {
+        "late_count": "counted over every eligible booking at the moment its deadline is worked out, before the confirmation check and before the cap, so a queued booking that was late still counts; it is not the number of report lines carrying late"
+      },
       "field_types": {
         "booking_count": "integer",
         "effective_deadline_days": "integer",
@@ -78,6 +81,9 @@
       ],
       "serialisation": "JSON object, two-space indent, trailing newline"
     }
+  },
+  "policy_fields": {
+    "deadline_business_days": "a non-negative integer no greater than the reporting calendar's horizon_days: the deadline is reached by walking business days forward from the trade day and the calendar describes no day past that horizon, so a larger figure names a deadline the calendar cannot place"
   },
   "reconciled_inputs": {
     "transaction_ledger": {

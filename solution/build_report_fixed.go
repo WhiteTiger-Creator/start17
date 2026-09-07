@@ -95,15 +95,25 @@ func writeJSON(path string, value any) {
 // #REG-7190: the deadline is reached by counting BUSINESS days forward from the
 // trade day, skipping every day the regulatory calendar closes. The trade day
 // itself is never counted, and a deadline landing past the horizon still counts.
-func addBusinessDays(day, n int, nonBusiness map[int]bool) int {
+// The contract puts deadline_business_days no higher than the calendar's
+// horizon_days, so the walk always terminates inside the horizon. The guard
+// below is a backstop against a calendar that closes every day within it, and
+// it REPORTS rather than breaking quietly: the old form returned whatever day
+// it had reached, which is a deadline the calendar never placed, and every
+// lateness verdict after it was measured against a number nobody chose.
+func addBusinessDays(day, n int, nonBusiness map[int]bool, horizon int) int {
 	d := day
+	limit := day + horizon + 1
 	for n > 0 {
 		d++
 		if !nonBusiness[d] {
 			n--
 		}
-		if d > day+10000 {
-			break
+		if d > limit {
+			fmt.Fprintf(os.Stderr,
+				"the deadline for a trade on day %d runs past the calendar's horizon of %d\n",
+				day, horizon)
+			os.Exit(1)
 		}
 	}
 	return d
@@ -144,6 +154,7 @@ func main() {
 	graceDays := int(policyValue(pol, "late_grace_days", 0))
 
 	nonBusiness := make(map[int]bool, len(cal.NonBusinessDays))
+	horizonDays := cal.HorizonDays
 	for _, d := range cal.NonBusinessDays {
 		nonBusiness[d] = true
 	}
@@ -210,7 +221,11 @@ func main() {
 				filer = d
 			}
 		}
-		deadline := addBusinessDays(t.TradeDay, deadlineDays, nonBusiness)
+		deadline := addBusinessDays(t.TradeDay, deadlineDays, nonBusiness, horizonDays)
+		// #REG-7214: late_count is taken over every ELIGIBLE booking, here, before
+		// the confirmation check below and before the cap further down. A booking
+		// queued as unconfirmed or displaced by the cap was still late; the figure
+		// measures timeliness, not the size of the file.
 		late := t.SubmittedDay > deadline+graceDays
 		if late {
 			lateCount++
@@ -261,9 +276,20 @@ func main() {
 	// nothing else, so anything an earlier run left there is cleared first. The
 	// CONTENTS go and the directory itself stays: the run does not own the path it
 	// is given, and under an unprivileged uid removing it would be refused outright.
-	if entries, err := os.ReadDir(*outputDir); err == nil {
-		for _, e := range entries {
-			os.RemoveAll(filepath.Join(*outputDir, e.Name()))
+	// Every error here is reported. Both the read and the removals had their
+	// failures dropped, so a stale entry the run could not remove left the output
+	// carrying more than the three contracted files while the run still exited
+	// nought. A run that cannot meet the contract says so and stops.
+	stale, err := os.ReadDir(*outputDir)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot read the output directory %s: %v\n", *outputDir, err)
+		os.Exit(1)
+	}
+	for _, e := range stale {
+		target := filepath.Join(*outputDir, e.Name())
+		if err := os.RemoveAll(target); err != nil {
+			fmt.Fprintf(os.Stderr, "cannot clear %s from the output directory: %v\n", target, err)
+			os.Exit(1)
 		}
 	}
 	summary := map[string]any{

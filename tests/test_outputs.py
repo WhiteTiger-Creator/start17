@@ -141,20 +141,41 @@ def test_a_run_writes_nothing_outside_its_output_directory():
     out_dir.mkdir(parents=True, exist_ok=True)
     os.chmod(out_dir, 0o777)
     staged = work / "ledger.json"
-    shutil.copyfile(str(LEDGER_PATH), str(staged))
-    os.chmod(staged, 0o644)
+    _stage_input(LEDGER_PATH, staged)
 
-    before = {str(q.relative_to(work)) for q in work.rglob("*")}
+    # Watching the per-run work area alone is not enough: the run is given
+    # HOME=/candidate-work and that directory is world-writable, so a scratch
+    # file dropped there -- or in /tmp -- left the output directory clean while
+    # the run had still written outside it. Every place it can write is swept.
+    watched = [work, Path(CHILD_ENV["HOME"]), Path("/tmp"), Path("/var/tmp")]
+
+    def sweep():
+        seen = set()
+        for root in watched:
+            if root.exists():
+                seen.update(str(q) for q in root.rglob("*"))
+        return seen
+
+    before = sweep()
     binary = _build(WORKFLOW_PATH)
     result = _run_agent([binary, "--input", str(staged), "--output-dir", str(out_dir)], cwd=work)
-    # the exit code is only a precondition; the verdict is the whole-tree diff below
     assert result.returncode == 0, (
         f"the run exited {result.returncode}\n"
         f"stdout: {result.stdout[-2000:]}\nstderr: {result.stderr[-2000:]}")
-    after = {str(q.relative_to(work)) for q in work.rglob("*")}
-    written = sorted(after - before)
-    assert written == ["output/exception_queue.jsonl", "output/report_lines.json",
-                       "output/summary.json"], written
+    written = sorted(sweep() - before)
+    expected = sorted(str(out_dir / n) for n in (
+        "exception_queue.jsonl", "report_lines.json", "summary.json"))
+    assert written == expected, (
+        f"the run wrote outside its output directory: "
+        f"{[q for q in written if q not in expected]}")
+    # A run that wrote nothing at all would also write nothing outside its output
+    # directory, so the three artifacts are read back: the scope is only worth
+    # measuring on a run that did the work.
+    assert _load_json(out_dir / "summary.json") == FIXTURE["primary"]["summary"]
+    assert _digest(_load_json(out_dir / "report_lines.json")) == \
+        FIXTURE["primary"]["lines_digest"]
+    assert _digest(_load_jsonl(out_dir / "exception_queue.jsonl")) == \
+        FIXTURE["primary"]["queue_digest"]
 
 
 def test_the_engine_is_one_file_with_no_sibling_source():
@@ -170,14 +191,22 @@ def test_the_engine_is_one_file_with_no_sibling_source():
     # copy sitting beside the engine is not a sibling in the sense that matters
     siblings = sorted(q.name for q in WORKFLOW_PATH.parent.glob("*.go")
                       if q.resolve() != engine and not q.name.startswith((".", "_")))
-    assert siblings == [], (
-        "the engine is one package main in one file compiled on its own, so these "
-        f"sibling sources never reach the build: {siblings}")
-    # No ban on a go.mod or go.sum sitting here: _build copies the source to a
-    # temporary directory and compiles it there, so nothing in /app/workflow can
-    # join the build in the first place. Failing a file that changes nothing
-    # would reject work the instruction does not forbid.
-    _build(WORKFLOW_PATH)
+    # A sibling is NOT itself a breach. instruction.md forbids a helper split into
+    # a sibling source JOINING the build, and _build copies the engine to a
+    # temporary directory and compiles it there, so nothing left in /app/workflow
+    # can join it. An agent that wrote its recovery step in Go and left the file
+    # behind has broken no stated rule, and failing it here would reject a correct
+    # submission over something with no effect on anything graded. What is checked
+    # is the rule itself: the engine compiles alone. The siblings are named in the
+    # failure only so a split submission says why it failed rather than dying on
+    # an undefined-symbol error that explains nothing.
+    try:
+        _build(WORKFLOW_PATH)
+    except AssertionError as exc:
+        raise AssertionError(
+            f"{WORKFLOW_PATH.name} does not compile on its own, as instruction.md "
+            f"requires. Other sources beside it, which never join this build: "
+            f"{siblings}\n\n{exc}") from exc
 
 
 def test_the_artifacts_are_serialised_exactly_as_the_contract_states(primary_outputs):
@@ -616,6 +645,30 @@ def test_a_policy_that_omits_a_field_keeps_the_governed_baseline():
                 if other != field:
                     assert summary[reported[other]] == staged[other], (
                         f"dropping {field} disturbed {other}")
+            # The echoed effective_* value is not the thing being graded. An
+            # engine can substitute the baseline for the four summary fields and
+            # go on reading the raw map in its decisions, where a missing key is
+            # nought in Go and nothing else here would notice. Each dropped run
+            # is therefore compared with the same policy carrying that field at
+            # its baseline, which must agree, and with the field at nought, which
+            # must not -- except for late_grace_days, whose baseline IS nought,
+            # so no behaviour can separate the two readings there.
+            explicit = dict(staged)
+            explicit[field] = baselines[field]
+            _write_json(path, {"default": explicit})
+            _, at_baseline, _, _ = _run_pipeline()
+            assert summary == at_baseline, (
+                f"dropping {field} did not behave as setting it to its baseline "
+                f"of {baselines[field]}: the fallback reaches the summary field "
+                "but not the run")
+            if baselines[field] != 0:
+                zeroed = dict(staged)
+                zeroed[field] = 0
+                _write_json(path, {"default": zeroed})
+                _, at_zero, _, _ = _run_pipeline()
+                assert summary != at_zero, (
+                    f"dropping {field} produced the same run as setting it to "
+                    "nought, which is what a missing Go map key reads as")
     finally:
         path.write_text(saved, encoding="utf-8")
 

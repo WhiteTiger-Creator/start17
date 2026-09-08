@@ -37,7 +37,7 @@
     }
   },
   "recovered_booking_count": 10513,
-  "recovered_ledger_digest": "b99c8b9ca3fe3bea284a5a1c9cf9fb1510405da78a1e414f494608c966f97c88",
-  "rule_sources_digest": "c5a8b42734989ca7ed515b383a2073a0dbb4ecb38dc77927a0fc1b922af51bf2",
+  "recovered_ledger_digest": "b47a6691fa9d83886260651e5e2d0b77d0941d5f8004526e922fc322ba88f69e",
+  "rule_sources_digest": "1a2729039ed9850b917d3159bb7414ceb72f115adfa3cb6bcd58da64ce7dd195",
   "shipped_truncated_digest": "23945f03f252162847f4b74da45287cca1ebafbc66b404f0f889c035ebd8b301"
 }

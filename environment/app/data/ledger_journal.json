@@ -39912,5 +39912,13 @@
     "seq": 5318,
     "trade_key": "TR-009900#1",
     "value": ""
+  },
+  {
+    "field": "notional",
+    "kind": "amend",
+    "posted_by": "ref-migration",
+    "seq": 5319,
+    "trade_key": "TR-000001#1",
+    "value": 9007199254740993
   }
 ]

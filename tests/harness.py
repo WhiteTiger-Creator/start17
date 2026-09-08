@@ -379,7 +379,14 @@ def _run_pipeline(script_path: Path = WORKFLOW_PATH, input_path: Path = LEDGER_P
     in_dir = work / "input"
     in_dir.mkdir(parents=True, exist_ok=True)
     staged = in_dir / "ledger.json"
-    shutil.copyfile(str(input_path), str(staged))
+    # _stage_input, not shutil.copyfile: the graded pipeline stages
+    # /app/data/transaction_ledger.json, the one path under /app/data the agent
+    # rewrites, and it stages it as ROOT. A plain copy reads through a final
+    # symlink, so a link planted there would have had root read a named file
+    # under /tests and lay it down inside the candidate's own readable work
+    # area. The helper refuses the link at the final component and refuses
+    # anything that is not a regular file.
+    _stage_input(Path(input_path), staged)
     os.chmod(staged, 0o444)
     os.chmod(in_dir, 0o555)
     before = hashlib.sha256(staged.read_bytes()).hexdigest()

@@ -596,6 +596,34 @@ def test_the_deadline_counts_business_days_across_the_calendar():
     assert [(l["deadline_day"], l["late"]) for l in lines] == [(13, False)]
 
 
+def test_a_deadline_of_zero_business_days_falls_on_the_trade_day():
+    """#REG-7190 counts business days forward, and nought of them is a value.
+
+    Every other world here uses one business day or three, and a deadline helper
+    that quietly treats nought as a minimum of one reads the same as the
+    governed rule on all of them: the graded and held-out runs both carry one,
+    the ordinary probes default to one, and the policy mutation uses three. At
+    nought the two part company -- the deadline is the trade day itself, so a
+    booking submitted that same day is on time and one submitted the next day is
+    late, where the minimum-of-one reading calls both of them on time.
+    """
+    trade_day = 40
+    ledger = [_booking("TR-1", trade_day=trade_day, submitted_day=trade_day),
+              _booking("TR-2", trade_day=trade_day, submitted_day=trade_day + 1)]
+    _, summary, lines, _ = _probe(ledger, [_party("CP-A", in_scope=True),
+                                           _party("CP-B", in_scope=True)],
+                                  deadline_days=0)
+    assert summary["effective_deadline_days"] == 0
+    assert [(r["trade_id"], r["deadline_day"]) for r in lines] == [
+        ("TR-1", trade_day), ("TR-2", trade_day)], (
+        "a deadline of nought business days did not fall on the trade day, so "
+        "the count is being floored at one")
+    assert [(r["trade_id"], r["late"]) for r in lines] == [
+        ("TR-1", False), ("TR-2", True)], (
+        "the booking submitted the day after a same-day deadline was not late")
+    assert summary["late_count"] == 1
+
+
 def test_a_late_submission_is_still_filed_and_counted():
     """Lateness is a flag on the return, not a reason to withhold it."""
     _, summary, lines, _ = _probe(
@@ -708,6 +736,35 @@ def test_stale_contents_are_cleared_from_the_output_directory():
         "run does not own the path it writes into")
     # and the run is the graded one, not three empty files that happen to be named right
     assert _load_json(out_dir / "summary.json") == FIXTURE["primary"]["summary"]
+
+
+def test_an_amendment_past_two_to_the_fifty_third_keeps_every_digit():
+    """#REG-7170 has an amendment overwrite the named field, digits and all.
+
+    A journal change carries its value as an untyped JSON member. A replay that
+    decodes those through a float64 -- which is what a Go decoder does by
+    default, and what most JSON readers do -- loses the low bits of any integer
+    past 2^53: 9007199254740993 arrives as 9007199254740992 and the amendment
+    writes a figure the journal never carried. The shipped journal now posts
+    exactly that value, so the sealed ledger digest grades it, and this reads
+    the booking back so a failure says which rule broke rather than only that a
+    digest moved.
+    """
+    journal = _load_json(JOURNAL_PATH)
+    posted = [c for c in journal
+              if c.get("kind") == "amend" and c.get("field") == "notional"
+              and isinstance(c.get("value"), int) and c["value"] > 2 ** 53]
+    assert posted, "the journal no longer posts a notional past 2^53"
+    ledger = {f'{r["trade_id"]}#{r["version"]}': r for r in _load_json(LEDGER_PATH)}
+    for change in posted:
+        booking = ledger.get(change["trade_key"])
+        assert booking is not None, f'{change["trade_key"]} left the rebuilt ledger'
+        assert booking["notional"] == change["value"], (
+            f'{change["trade_key"]} carries {booking["notional"]}, not the '
+            f'{change["value"]} the journal posted; the value was rounded on the '
+            "way in rather than overwritten as it stood")
+        # and it really is past what a float64 holds exactly
+        assert int(float(change["value"])) != change["value"]
 
 
 def test_a_change_naming_a_booking_the_snapshot_never_carried_is_ignored():
@@ -1035,4 +1092,5 @@ def test_shipped_contract_matches_the_golden_copy():
     """
     shipped = json.loads(SPEC_PATH.read_text(encoding="utf-8"))
     assert shipped == json.loads(GOLDEN_CONTRACT_PATH.read_text(encoding="utf-8"))
+
 

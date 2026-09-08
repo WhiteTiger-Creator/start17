@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -40,7 +41,14 @@ func readJSON(path string, into any) {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if err := json.Unmarshal(raw, into); err != nil {
+	// UseNumber, because a journal change carries its value as `any`: the default
+	// decoder turns every JSON number into a float64, and a notional past 2^53
+	// loses its last digits on the way in -- 9007199254740993 arrives as
+	// 9007199254740992 and the amendment silently writes the wrong figure. A
+	// json.Number keeps the text and ParseInt reads it exactly.
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	dec.UseNumber()
+	if err := dec.Decode(into); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -61,6 +69,10 @@ func setField(t *trade, field string, value any) {
 	}
 	num := func(set func(int64)) {
 		switch v := value.(type) {
+		case json.Number:
+			if n, err := v.Int64(); err == nil {
+				set(n)
+			}
 		case float64:
 			set(int64(v))
 		case string:

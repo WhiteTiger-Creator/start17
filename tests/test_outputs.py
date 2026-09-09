@@ -174,12 +174,107 @@ def _writable_roots(work: Path) -> list:
     return kept
 
 
-def test_a_run_writes_nothing_outside_its_output_directory():
+# Names an implementation could be handed off to. Only those the image actually
+# carries are used; the point is not an exhaustive list of every interpreter that
+# exists but that the ones a submission would reach for are shut for one run.
+_INTERPRETER_NAMES = (
+    "python3", "python3.13", "python3.12", "python", "perl", "ruby", "node",
+    "sh", "bash", "dash", "busybox", "awk", "gawk", "mawk", "php", "tclsh", "lua",
+)
+_INTERPRETER_DIRS = ("/usr/local/bin", "/usr/bin", "/bin", "/usr/local/sbin",
+                     "/usr/sbin", "/sbin")
+
+
+def _reachable_interpreters() -> list:
+    """Interpreters on this image that the unprivileged run could execute."""
+    found = {}
+    for directory in _INTERPRETER_DIRS:
+        for name in _INTERPRETER_NAMES:
+            path = Path(directory) / name
+            try:
+                st = path.stat()
+            except OSError:
+                continue
+            if not path.is_file() or not st.st_mode & stat.S_IXOTH:
+                continue
+            found[str(path.resolve())] = (path, st.st_mode)
+    return sorted(found.values(), key=lambda pair: str(pair[0]))
+
+
+def test_the_compiled_engine_does_the_reporting_itself():
+    """instruction.md makes that one Go source the whole engine.
+
+    Compiling the file on its own stops a sibling GO SOURCE joining the build,
+    and nothing more. A single compilable `package main` whose only substantive
+    act is to exec /usr/bin/python3 with the reporting implementation carried in
+    a string constant beside it satisfies every other check here: it is one file,
+    it compiles alone, it needs nothing else on disk, and it can be made to
+    produce the sealed artifacts byte for byte. The Go engine the task asks for
+    was never restored.
+
+    The hand-off needs an interpreter it can reach. Every one this image carries
+    is closed to the candidate uid for the length of one run -- root keeps them,
+    so the suite itself is unaffected -- and the run has to produce the sealed
+    artifacts anyway. A program that does the reporting in Go notices nothing; one
+    that hands the work to an interpreter has nothing left to hand it to.
+    """
+    binary = _build(WORKFLOW_PATH)
+    _publish_inputs()
+    interpreters = _reachable_interpreters()
+    assert interpreters, (
+        "no interpreter on this image is executable by the candidate, so this "
+        "probe is watching nothing -- check _INTERPRETER_DIRS")
+    assert any(Path(path).name.startswith("python") for path, _ in interpreters), (
+        "no python interpreter was found to close, though it is the one the "
+        "hand-off reaches for first")
+
+    work = _candidate_dir()
+    out_dir = work / "output"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    os.chmod(out_dir, 0o777)
+    staged = work / "ledger.json"
+    _stage_input(LEDGER_PATH, staged)
+
+    try:
+        for path, _mode in interpreters:
+            # root-owned and root-executable still, so pytest and the Go
+            # toolchain are untouched; unreachable to uid 65534
+            os.chmod(path, 0o700)
+        result = _run_agent(
+            [binary, "--input", str(staged), "--output-dir", str(out_dir)], cwd=work)
+    finally:
+        for path, mode in interpreters:
+            try:
+                os.chmod(path, stat.S_IMODE(mode))
+            except OSError:
+                pass
+
+    named = [str(path) for path, _ in interpreters]
+    assert result.returncode == 0, (
+        f"the run exited {result.returncode} with these interpreters closed to "
+        f"it: {named}\nstdout: {result.stdout[-2000:]}\n"
+        f"stderr: {result.stderr[-2000:]}")
+    assert _load_json(out_dir / "summary.json") == FIXTURE["primary"]["summary"], (
+        f"the summary changed with these interpreters closed: {named}")
+    assert _digest(_load_json(out_dir / "report_lines.json")) == \
+        FIXTURE["primary"]["lines_digest"]
+    assert _digest(_load_jsonl(out_dir / "exception_queue.jsonl")) == \
+        FIXTURE["primary"]["queue_digest"]
+
+
+def test_a_run_leaves_nothing_outside_its_output_directory():
     """instruction.md scopes a run to its --output-dir, and nothing checked it.
 
     Every other run here reads the three artifacts by name, so a run that also
     dropped a scratch file beside them, or in the directory it was started from,
     satisfied all of them. This walks the whole work area afterwards.
+
+    What is graded is the state the run LEAVES, which is what the instruction
+    asks for. Writing an artifact through a temporary file elsewhere and moving
+    it into place is an ordinary way to write a file atomically, and a check that
+    failed it would be failing correct work; a scratch file that outlives the run
+    is a different thing, and so is one the run takes away that it did not put
+    there. Both are caught below, in all three directions: added, changed, gone.
     """
     _publish_inputs()
     work = _candidate_dir()
@@ -215,6 +310,12 @@ def test_a_run_writes_nothing_outside_its_output_directory():
             "the writable tmpfs at /dev/shm is watched by nothing here")
 
     def sweep():
+        # Only what the CANDIDATE owns is recorded. The sweep reaches /tmp and the
+        # tmpfs mounts, where the verifier's own machinery writes too -- pytest's
+        # cache among them -- and a root-owned file appearing there while the run
+        # was in flight is not this run leaving its output directory. The graded
+        # binary runs as CANDIDATE_UID and everything it writes carries that
+        # owner, so filtering on it keeps the check pointed at the run under test.
         seen = {}
         for root in watched:
             if not root.exists():
@@ -223,6 +324,8 @@ def test_a_run_writes_nothing_outside_its_output_directory():
                 try:
                     st = q.stat()
                 except OSError:
+                    continue
+                if st.st_uid != CANDIDATE_UID:
                     continue
                 seen[str(q)] = (st.st_mtime_ns, st.st_size) if not q.is_dir() else None
         return seen
@@ -237,8 +340,13 @@ def test_a_run_writes_nothing_outside_its_output_directory():
     expected = sorted(str(out_dir / n) for n in (
         "exception_queue.jsonl", "report_lines.json", "summary.json"))
     assert written == expected, (
-        f"the run wrote outside its output directory: "
+        f"the run left something outside its output directory: "
         f"{[q for q in written if q not in expected]}")
+    # and the other direction, which the difference above cannot see: a file the
+    # sweep held before the run and no longer holds after it was taken away by
+    # the run, which is as much a mark left outside as a file added
+    gone = sorted(q for q in before if q not in after)
+    assert not gone, f"the run removed files outside its output directory: {gone}"
     # A run that wrote nothing at all would also write nothing outside its output
     # directory, so the three artifacts are read back: the scope is only worth
     # measuring on a run that did the work.

@@ -103,8 +103,16 @@ func writeJSON(path string, value any) {
 // it had reached, which is a deadline the calendar never placed, and every
 // lateness verdict after it was measured against a number nobody chose.
 func addBusinessDays(day, n int, nonBusiness map[int]bool, horizon int) int {
+	// The walk consumes BUSINESS days while the day index counts calendar days,
+	// so a bound of day+horizon is not a bound on the walk at all: reaching n
+	// business days needs n days plus every closure crossed on the way. Walking
+	// n business days can therefore never take more than n + (number of closed
+	// days the calendar lists) steps, which is the backstop used here -- a real
+	// upper bound rather than one that hard-exits on deadline_business_days the
+	// contract lists as valid. Days past the horizon are business days: nothing
+	// closes them.
 	d := day
-	limit := day + horizon + 1
+	limit := day + n + len(nonBusiness) + 1
 	for n > 0 {
 		d++
 		if !nonBusiness[d] {
@@ -112,8 +120,7 @@ func addBusinessDays(day, n int, nonBusiness map[int]bool, horizon int) int {
 		}
 		if d > limit {
 			fmt.Fprintf(os.Stderr,
-				"the deadline for a trade on day %d runs past the calendar's horizon of %d\n",
-				day, horizon)
+				"the deadline walk for a trade on day %d did not terminate\n", day)
 			os.Exit(1)
 		}
 	}

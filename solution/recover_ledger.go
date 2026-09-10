@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strconv"
@@ -50,6 +51,15 @@ func readJSON(path string, into any) {
 	dec.UseNumber()
 	if err := dec.Decode(into); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	// A recovery source is one JSON document and nothing else. Decode stops at
+	// the end of the first value it reads, so a file carrying a valid document
+	// followed by anything at all was accepted and replayed; a journal that has
+	// been appended to or truncated mid-write is a malformed recovery log, and
+	// the authoritative ledger is not rebuilt from one.
+	if _, err := dec.Token(); err != io.EOF {
+		fmt.Fprintf(os.Stderr, "%s carries trailing content after its JSON document\n", path)
 		os.Exit(1)
 	}
 }

@@ -177,12 +177,18 @@ def _writable_roots(work: Path) -> list:
 # Names an implementation could be handed off to. Only those the image actually
 # carries are used; the point is not an exhaustive list of every interpreter that
 # exists but that the ones a submission would reach for are shut for one run.
+# `go` belongs on this list beside the script interpreters. The verifier image
+# carries the toolchain so it can compile the submission, and `go run` will build
+# and execute a second program from a source the engine writes at run time -- a
+# hand-off with no helper file left behind for the file-stashing probe to take
+# away, and no script interpreter involved for this list to close.
 _INTERPRETER_NAMES = (
     "python3", "python3.13", "python3.12", "python", "perl", "ruby", "node",
     "sh", "bash", "dash", "busybox", "awk", "gawk", "mawk", "php", "tclsh", "lua",
+    "go", "gofmt",
 )
 _INTERPRETER_DIRS = ("/usr/local/bin", "/usr/bin", "/bin", "/usr/local/sbin",
-                     "/usr/sbin", "/sbin")
+                     "/usr/sbin", "/sbin", "/usr/local/go/bin")
 
 
 def _reachable_interpreters() -> list:
@@ -227,6 +233,10 @@ def test_the_compiled_engine_does_the_reporting_itself():
     assert any(Path(path).name.startswith("python") for path, _ in interpreters), (
         "no python interpreter was found to close, though it is the one the "
         "hand-off reaches for first")
+    assert any(Path(path).name == "go" for path, _ in interpreters), (
+        "the Go toolchain was not among the interpreters closed, though this "
+        "image carries it to compile the submission and `go run` will build and "
+        "execute a second program from a source the engine writes at run time")
 
     work = _candidate_dir()
     out_dir = work / "output"
@@ -598,7 +608,14 @@ def _probe(bookings, parties, *, non_business=(), floor=1_000_000, deadline_days
     names = ("counterparty_register.json", "reporting_calendar.json",
              "fx_rates.json", "reporting_policy.json")
     saved = {n: (DATA / n).read_text(encoding="utf-8") for n in names}
-    staged = _CWORK / f"probe-{next(_run_ctr)}.json"
+    # A fresh mkdtemp directory rather than /candidate-work/probe-N.json: that
+    # name was predictable inside a 1777 directory, so an earlier graded run
+    # could plant a symlink there and have root write the probe's bookings
+    # through it. The directory is created here, owned by root and world-
+    # readable so the run can still read the file it is handed.
+    stage_dir = Path(tempfile.mkdtemp(prefix="probe_"))
+    os.chmod(stage_dir, 0o755)
+    staged = stage_dir / "ledger.json"
     try:
         _write_json(DATA / "counterparty_register.json", parties)
         _write_json(DATA / "reporting_calendar.json",
@@ -613,6 +630,49 @@ def _probe(bookings, parties, *, non_business=(), floor=1_000_000, deadline_days
     finally:
         for n, text in saved.items():
             (DATA / n).write_text(text, encoding="utf-8")
+        shutil.rmtree(stage_dir, ignore_errors=True)
+
+
+def test_an_empty_ledger_still_produces_the_three_artifacts():
+    """The contract's ledger is an array with no minimum length.
+
+    Every other run here hands the engine at least one booking, so an ordinary
+    accumulator seeded from the first element -- best[ledger[0].TradeID] and then
+    ledger[1:] -- passed the whole suite while panicking on the shortest
+    conforming ledger there is. A run over [] owes the same three files: every
+    count nought, an empty report array and an empty queue.
+    """
+    out_dir, summary, lines, queue = _probe([], [_party("CP-A"), _party("CP-B")])
+    assert set(summary) == SUMMARY_KEYS
+    for field in ("booking_count", "trade_count", "eligible_count",
+                  "reported_count", "exception_count", "late_count",
+                  "reported_usd_notional"):
+        assert summary[field] == 0, f"{field} is {summary[field]} on an empty ledger"
+    assert lines == [], "an empty ledger reported something"
+    assert queue == [], "an empty ledger queued something"
+    assert sorted(q.name for q in out_dir.iterdir()) == [
+        "exception_queue.jsonl", "report_lines.json", "summary.json"]
+
+
+def test_a_submission_cap_of_zero_files_nothing():
+    """#REG-7196 takes submissions only until the cap is reached, nought included.
+
+    The cap probes all use a positive limit and the fallback probe only asks that
+    a zero-valued policy give a different summary from an omitted one, which an
+    engine that echoes the nought into effective_max_submissions while quietly
+    treating it as one satisfies. Here the only eligible confirmed booking has to
+    go unfiled and be queued over the cap instead.
+    """
+    _, summary, lines, queue = _probe(
+        [_booking("TR-1")], [_party("CP-A"), _party("CP-B")], max_submissions=0)
+    assert summary["effective_max_submissions"] == 0
+    assert summary["eligible_count"] == 1, (
+        "the booking is not eligible, so the cap decides nothing here")
+    assert lines == [], (
+        "a cap of nought filed a report line, so the nought was read as no cap "
+        "or clamped to one")
+    assert [(r["trade_id"], r["reason"]) for r in queue] == [("TR-1", "over_cap")]
+    assert summary["reported_count"] == 0 and summary["exception_count"] == 1
 
 
 def test_obligation_follows_the_reporting_side_alone():

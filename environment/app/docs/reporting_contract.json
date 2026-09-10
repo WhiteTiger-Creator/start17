@@ -113,7 +113,7 @@
   "runtime_budget_seconds": 90,
   "units": {
     "days": "integer offsets on the regulatory day grid",
-    "notional": "a non-negative integer in the trade's own currency. Its conversion to usd_notional is exact: notional times the rate table's micro_usd_per_unit divided by a million, floored. The product of those two may exceed what a signed 64-bit integer holds even though every usd_notional the conversion yields sits inside one, so the intermediate cannot be carried in 64 bits",
+    "notional": "a non-negative integer in the trade's own currency, itself inside the signed 64-bit range. Its conversion to usd_notional is exact: notional times the rate table's micro_usd_per_unit divided by a million, floored. The product of those two may exceed what a signed 64-bit integer holds even though every usd_notional the conversion yields sits inside one, so the intermediate cannot be carried in 64 bits",
     "usd_notional": "whole US dollars; every usd_notional and their reported sum fit a signed 64-bit integer"
   }
 }

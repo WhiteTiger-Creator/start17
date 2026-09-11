@@ -7,7 +7,7 @@
       "/app/data/reporting_policy.json"
     ],
     "input": "--input selects the transaction ledger only; default /app/data/transaction_ledger.json",
-    "output_dir": "--output-dir selects the output directory; default /app/output"
+    "output_dir": "--output-dir selects the directory the run writes into; default /app/output. The paths recorded for the three outputs below are where they land under that default: given the flag, the same three file names are written into the directory it names and nowhere else"
   },
   "contract_version": "reg-report-v1",
   "description": "Output contract for the transaction-reporting engine. Shapes, paths, field lists and sort orders only; no derivation rule lives here.",

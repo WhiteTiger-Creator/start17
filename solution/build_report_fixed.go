@@ -219,8 +219,12 @@ func main() {
 		if !rp.InScope || rp.Classification == "nonfinancial_below" {
 			continue
 		}
-		rate := fx.MicroUSDPerUnit[t.Currency]
-		if rate == 0 {
+		// The two-value lookup, not a zero sentinel: #REG-7188 turns on whether
+		// the table CARRIES the currency, and reading a missing key as zero also
+		// silently skipped a currency the table carries at a rate of nought,
+		// which is a rate rather than an absence.
+		rate, carried := fx.MicroUSDPerUnit[t.Currency]
+		if !carried {
 			continue
 		}
 		// #REG-7188: the notional is carried into USD at the table's rate and floored

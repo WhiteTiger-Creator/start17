@@ -176,7 +176,19 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if err := os.WriteFile("/app/data/transaction_ledger.json", append(encoded, '\n'), 0o644); err != nil {
+	// Published by rename rather than written over in place: writing straight to
+	// the path truncates it first, so an interruption part-way through leaves
+	// neither the ledger that was there nor the rebuilt one, only a half-written
+	// document at the path the engine reads next. The rename is atomic, so the
+	// path carries one whole ledger or the other at every instant.
+	target := "/app/data/transaction_ledger.json"
+	staged := target + ".rebuilding"
+	if err := os.WriteFile(staged, append(encoded, '\n'), 0o644); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	if err := os.Rename(staged, target); err != nil {
+		os.Remove(staged)
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

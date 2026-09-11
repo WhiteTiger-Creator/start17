@@ -337,7 +337,24 @@ def test_a_run_leaves_nothing_outside_its_output_directory():
                     continue
                 if st.st_uid != CANDIDATE_UID:
                     continue
-                seen[str(q)] = (st.st_mtime_ns, st.st_size) if not q.is_dir() else None
+                # Mode travels with size and mtime, and a directory is recorded
+                # by its mode rather than as None: a run that only widened the
+                # permissions on something it left behind earlier, or that
+                # rewrote a file to the same length and put the timestamp back,
+                # changed something outside its output directory and the pair
+                # alone could not see it. The content digest closes the rest of
+                # that gap for a file small enough to read cheaply.
+                if q.is_dir():
+                    seen[str(q)] = ("dir", stat.S_IMODE(st.st_mode))
+                    continue
+                body = None
+                if stat.S_ISREG(st.st_mode) and st.st_size <= 1_000_000:
+                    try:
+                        body = hashlib.sha256(q.read_bytes()).hexdigest()
+                    except OSError:
+                        body = "unreadable"
+                seen[str(q)] = (st.st_mtime_ns, st.st_size,
+                                stat.S_IMODE(st.st_mode), body)
         return seen
 
     before = sweep()

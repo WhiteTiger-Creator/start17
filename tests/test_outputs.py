@@ -207,6 +207,69 @@ def _reachable_interpreters() -> list:
     return sorted(found.values(), key=lambda pair: str(pair[0]))
 
 
+def test_the_engine_refuses_the_directory_its_own_inputs_live_in():
+    """instruction.md: /app/data is not a directory this run may empty and fill.
+
+    --output-dir takes a directory, and nothing stopped one from naming the very
+    directory the run reads: the three-files-and-nothing-else rule would then
+    require clearing the snapshot, the journal, the register, the calendar, the
+    rates and the policy, while the same contract requires every one of them
+    back byte for byte. Those cannot both hold, so the contract settles it --
+    the run says so and stops, having cleared nothing.
+
+    What this confirms is the end state the contract now states, not which
+    mechanism produced it: under the graded uid /app/data is root-owned, so a
+    run that tried to clear it would fail on the removal and report that
+    instead. Both readings leave the directory untouched and exit non-zero,
+    which is the point -- there is no longer a reading of the contract on
+    which a run quietly empties the directory its own inputs live in.
+    """
+    binary = _build(WORKFLOW_PATH)
+    _publish_inputs()
+    before = {q.name: hashlib.sha256(q.read_bytes()).hexdigest()
+              for q in sorted(DATA.iterdir()) if q.is_file()}
+    work = _candidate_dir()
+    result = _run_agent([binary, "--output-dir", str(DATA)], cwd=work)
+    assert result.returncode != 0, (
+        "the run accepted /app/data as its output directory, where clearing the "
+        "contents and returning the inputs unchanged cannot both be done")
+    assert str(DATA) in result.stderr, (
+        "the run refused the directory without naming it on standard error: "
+        f"{result.stderr[-2000:]}")
+    after = {q.name: hashlib.sha256(q.read_bytes()).hexdigest()
+             for q in sorted(DATA.iterdir()) if q.is_file()}
+    assert after == before, (
+        "the refused run still changed /app/data: "
+        f"{sorted(set(before) ^ set(after)) or [n for n in before if before[n] != after.get(n)]}")
+
+
+def test_the_engine_starts_no_other_program():
+    """instruction.md: the compiled program does the reporting itself.
+
+    The two probes beside this one are run-time defences, and both were reasoned
+    around: an engine can carry a helper as a byte constant, write it, run it
+    and unlink it before the sweep looks, touching no interpreter on the image
+    and leaving no file under /app to withhold. There is no way to start a
+    process in Go that does not go through one of these, so this closes the
+    route where it starts rather than chasing each way of reaching it.
+    """
+    source = WORKFLOW_PATH.read_text(encoding="utf-8")
+    banned_imports = {"os/exec", "plugin", "C"}
+    declared = set(_go_imports(source))
+    assert not declared & banned_imports, (
+        f"{WORKFLOW_PATH.name} imports {sorted(declared & banned_imports)}: the "
+        "compiled program is meant to do the reporting itself rather than hand "
+        "the run off to another program")
+    payload = _go_source_payload(source)
+    for call in ("os.StartProcess", "syscall.Exec", "syscall.ForkExec",
+                 "syscall.StartProcess", "syscall.Syscall", "syscall.RawSyscall"):
+        assert call not in payload, (
+            f"{WORKFLOW_PATH.name} reaches {call}, which starts another program")
+    # a linker directive lives in a comment, where neither scan above looks
+    assert "go:linkname" not in source, (
+        f"{WORKFLOW_PATH.name} links to an unexported entry point")
+
+
 def test_the_compiled_engine_does_the_reporting_itself():
     """instruction.md makes that one Go source the whole engine.
 
@@ -258,6 +321,15 @@ def test_the_compiled_engine_does_the_reporting_itself():
                 os.chmod(path, stat.S_IMODE(mode))
             except OSError:
                 pass
+    # The modes are captured once per RESOLVED path, so /bin/bash and
+    # /usr/bin/bash -- the same file on this image -- are saved once rather than
+    # twice, and the second save cannot record the mode the first chmod just
+    # imposed. That is worth checking rather than assuming: leaving an
+    # interpreter closed behind us breaks the harness for everything after.
+    for path, mode in interpreters:
+        assert path.stat().st_mode & stat.S_IXOTH, (
+            f"{path} was left closed after the probe: the modes were not put "
+            f"back, and everything that runs after this depends on them")
 
     named = [str(path) for path, _ in interpreters]
     assert result.returncode == 0, (
@@ -332,7 +404,11 @@ def test_a_run_leaves_nothing_outside_its_output_directory():
                 continue
             for q in [root, *root.rglob("*")]:
                 try:
-                    st = q.stat()
+                    # lstat, not stat: a candidate-owned symlink whose target
+                    # is root-owned reported the TARGET's owner and was filtered
+                    # out by the uid test below, so a link left behind in the
+                    # work area counted as nothing at all.
+                    st = q.lstat()
                 except OSError:
                     continue
                 if st.st_uid != CANDIDATE_UID:
@@ -781,6 +857,29 @@ def test_the_deadline_counts_business_days_across_the_calendar():
     assert [(l["deadline_day"], l["late"]) for l in lines] == [(13, False)]
 
 
+def test_a_deadline_further_out_than_any_other_world_here_still_walks_every_day():
+    """#REG-7190 counts business days forward, however many the policy names.
+
+    Every world in this file uses nought, one or three business days, and the
+    graded and held-out runs both carry one. An engine that walked correctly up
+    to three and then stopped -- clamping, or unrolling the loop it was written
+    with -- read the same as the governed rule on all of them. The contract lets
+    the policy name any span up to the calendar's horizon, so this walks six
+    over a week with two closures inside it: the sixth business day after day 40
+    is day 48, not day 46 and not day 43.
+    """
+    trade_day = 40
+    closed = (42, 45)
+    ledger = [_booking("TR-1", trade_day=trade_day, submitted_day=trade_day)]
+    _, summary, lines, _ = _probe(ledger, [_party("CP-A", in_scope=True),
+                                           _party("CP-B", in_scope=True)],
+                                  non_business=closed, deadline_days=6)
+    assert summary["effective_deadline_days"] == 6
+    assert [(r["trade_id"], r["deadline_day"]) for r in lines] == [("TR-1", 48)], (
+        "six business days from day 40 over closures on 42 and 45 is day 48; a "
+        "shorter answer means the walk stops counting or skips the closed days")
+
+
 def test_a_deadline_of_zero_business_days_falls_on_the_trade_day():
     """#REG-7190 counts business days forward, and nought of them is a value.
 
@@ -1090,10 +1189,21 @@ def test_register_path_actually_influences_the_output():
 
 
 def test_run_is_idempotent(primary_outputs):
-    """Re-running over the same ledger reproduces the same artifacts."""
-    _, summary, lines, queue = primary_outputs
-    _, s2, l2, q2 = _run_pipeline()
+    """Re-running over the same ledger reproduces the same artifacts.
+
+    Byte for byte, not merely value for value. Both comparisons below run on
+    decoded documents and _digest sorts keys before hashing, so an engine that
+    rendered summary.json with its fields in a different order on a later run
+    satisfied them while its artifacts differed as files -- which is not what
+    "identical across reruns" says.
+    """
+    first_dir, summary, lines, queue = primary_outputs
+    second_dir, s2, l2, q2 = _run_pipeline()
     assert s2 == summary and _digest(l2) == _digest(lines) and _digest(q2) == _digest(queue)
+    for name in ("summary.json", "report_lines.json", "exception_queue.jsonl"):
+        assert (second_dir / name).read_bytes() == (first_dir / name).read_bytes(), (
+            f"{name} came out with the same values but different bytes on a "
+            "second run over the same ledger")
 
 
 def test_the_default_output_path_is_a_directory_the_run_does_not_own():

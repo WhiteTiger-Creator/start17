@@ -298,6 +298,15 @@ func main() {
 		return exceptions[i].TradeID < exceptions[j].TradeID
 	})
 
+	// The output directory is one this run may empty and fill, which the
+	// directory holding its own inputs is not: clearing /app/data would take
+	// away the very documents the contract requires back byte for byte, so a
+	// run handed that path says so and stops before writing or clearing
+	// anything at all.
+	if cleaned, err := filepath.Abs(filepath.Clean(*outputDir)); err == nil && cleaned == "/app/data" {
+		fmt.Fprintf(os.Stderr, "%s holds this run's own inputs and is not an output directory\n", cleaned)
+		os.Exit(1)
+	}
 	if err := os.MkdirAll(*outputDir, 0o755); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

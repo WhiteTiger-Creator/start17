@@ -15,3 +15,7 @@ go run "${SCRIPT_DIR}/recover_ledger.go"
 
 cp "${SCRIPT_DIR}/build_report_fixed.go" /app/workflow/build_report.go
 go run /app/workflow/build_report.go --output-dir /app/output
+
+# The Go build cache and module root this script pointed at /tmp are its own
+# scratch, and they go when it does rather than being left behind.
+rm -rf /tmp/gocache /tmp/gopath

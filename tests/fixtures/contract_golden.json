@@ -25,7 +25,7 @@
         "over_cap",
         "unconfirmed"
       ],
-      "serialisation": "one compact JSON object per line, trailing newline",
+      "serialisation": "one compact JSON object per line, trailing newline; a queue carrying no rows is an empty file, since there is no row to end with a newline",
       "sort": "ascending by reason, then trade_id"
     },
     "report_lines": {

@@ -107,6 +107,7 @@
         "confirmed"
       ],
       "serialisation": "JSON array, two-space indent, trailing newline",
+      "key": "trade_id and version together identify a booking: a conforming ledger carries at most one record for a given pair, so the highest version of a trade id names exactly one record",
       "sort": "ascending by trade_id, then version"
     }
   },

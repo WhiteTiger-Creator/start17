@@ -138,7 +138,11 @@ func main() {
 	// before survives, one posted while it was out is lost.
 	held := map[string]trade{}
 
-	sort.Slice(journal, func(i, j int) bool { return journal[i].Seq < journal[j].Seq })
+	// Stable, so two entries sharing a seq replay in the order the journal
+	// lists them rather than in whichever order an unstable sort happens to
+	// leave them -- the same journal then replays the same way twice. The
+	// shipped journal has no duplicate seq; a conforming one might.
+	sort.SliceStable(journal, func(i, j int) bool { return journal[i].Seq < journal[j].Seq })
 	for _, c := range journal {
 		switch c.Kind {
 		case "amend":

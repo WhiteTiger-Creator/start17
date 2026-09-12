@@ -38,3 +38,11 @@ RUN set -eu; \
 COPY app/ /app/
 RUN cp /app/workflow/build_report.go /app/workflow/.build_report.original.go \
     && chmod a-w /app/workflow/.build_report.original.go
+
+# The default output directory ships with the image rather than being created by
+# whoever runs the engine first. instruction.md tells the solver the run does not
+# own the path it writes into, and that is only true if the path is already
+# there; leaving it to be created meant a solver who only ever passed
+# --output-dir left no /app/output at all. Sticky and world-writable, so the
+# unprivileged graded run can fill it without owning it.
+RUN mkdir -p /app/output && chmod 1777 /app/output
